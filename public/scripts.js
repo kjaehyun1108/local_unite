@@ -528,7 +528,8 @@ window.addEventListener('resize', function() {
 });
 
 async function loadHeartBeats() {
-  const res = await fetch("/api/heart_beat");
+  const res = await fetch("/api/heart_beat_ai");
   const data = await res.json();
   console.log(data);
 };
+
