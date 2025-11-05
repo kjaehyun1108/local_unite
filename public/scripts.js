@@ -524,4 +524,11 @@ window.addEventListener('resize', function() {
             drawECGPlaceholder();
         }
     }
+
 });
+
+async function loadHeartBeats() {
+  const res = await fetch("/api/heart_beat");
+  const data = await res.json();
+  console.log(data);
+};
