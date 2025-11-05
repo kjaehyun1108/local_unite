@@ -32,5 +32,18 @@ app.get("/api/heart_beat", (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
 
+app.post("/api/heart_beat_ai", async (req, res) => {
+  const { bpm, systolic, diastolic } = req.body;
+
+  if (!bpm) return res.status(400).json({ error: "bpm required" });
+
+  const { data, error } = await supabase
+    .from("heart_beat_ai")
+    .insert([{ bpm, systolic, diastolic }]);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ success: true, data });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
