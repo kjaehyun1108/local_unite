@@ -32,17 +32,32 @@ app.get("/api/heart_beat", (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
 
-app.post("/api/heart_beat_ai", async (req, res) => {
-  const { bpm, systolic, diastolic } = req.body;
+app.get("/api/heart_beat_ai", async (req, res) => {
+  try {
+    // 최근 심박 데이터 10개 조회
+    const { data, error } = await supabase
+      .from("heart_beat")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(10);
 
-  if (!bpm) return res.status(400).json({ error: "bpm required" });
+    if (error) throw error;
 
-  const { data, error } = await supabase
-    .from("heart_beat_ai")
-    .insert([{ bpm, systolic, diastolic }]);
+    // 단순 평균 BPM 계산 (AI 분석 자리에 해당)
+    const avgBpm =
+      data.length > 0
+        ? data.reduce((sum, row) => sum + row.bpm, 0) / data.length
+        : 0;
 
-  if (error) return res.status(500).json({ error: error.message });
-  res.json({ success: true, data });
+    res.json({
+      success: true,
+      avg_bpm: avgBpm,
+      count: data.length,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 const port = process.env.PORT || 3000;
