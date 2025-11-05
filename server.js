@@ -28,5 +28,9 @@ app.post("/api/users", async (req, res) => {
   res.json(data);
 });
 
+app.get("/api/heart_beat", (req, res) => {
+  res.json({ ok: true, time: new Date().toISOString() });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
