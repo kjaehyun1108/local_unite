@@ -524,4 +524,21 @@ window.addEventListener('resize', function() {
             drawECGPlaceholder();
         }
     }
+
 });
+async function loadUsers() {
+  const res = await fetch("/api/users");
+  const users = await res.json();
+  console.log(users);
+}
+
+async function addUser() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  await fetch("/api/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email })
+  });
+  loadUsers();
+};
