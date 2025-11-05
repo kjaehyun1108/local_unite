@@ -28,21 +28,17 @@ app.post("/api/users", async (req, res) => {
   res.json(data);
 });
 
-app.get("/api/heart_beat", (req, res) => {
-  res.json({ ok: true, time: new Date().toISOString() });
-});
-
 app.post("/api/heart_beat_ai", async (req, res) => {
   const { bpm, systolic, diastolic } = req.body;
-
-  if (!bpm) return res.status(400).json({ error: "bpm required" });
-
-  const { data, error } = await supabase
-    .from("heart_beat")
-    .insert([{ bpm, systolic, diastolic }]);
-
-  if (error) return res.status(500).json({ error: error.message });
-  res.json({ success: true, data });
+  try {
+    const { data, error } = await supabase
+      .from("heart_beat_ai")
+      .insert([{ bpm, systolic, diastolic }]);
+    if (error) throw error;
+    res.status(200).json({ message: "Data inserted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 const port = process.env.PORT || 3000;
