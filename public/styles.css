@@ -1,3 +1,4 @@
+/* --- 기존 스타일 (고혈압) --- */
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +18,6 @@ body {
     padding: 20px;
 }
 
-/* 헤더 스타일 */
 header {
     text-align: center;
     margin-bottom: 40px;
@@ -35,7 +35,6 @@ header p {
     opacity: 0.9;
 }
 
-/* 메인 섹션 스타일 */
 main {
     display: flex;
     flex-direction: column;
@@ -57,7 +56,7 @@ section:hover {
 
 section h2 {
     color: #4a5568;
-    margin-bottom: 25px;
+    margin-bottom: 15px; /* 당뇨병 섹션과 통일 (25px -> 15px) */
     font-size: 1.5rem;
     display: flex;
     align-items: center;
@@ -68,12 +67,52 @@ section h2 i {
     color: #667eea;
 }
 
-/* 혈압 섹션 스타일 */
-.blood-pressure-section {
+/* --- (기존 .blood-pressure-section, .ecg-section 등...) --- */
+
+
+/* --- [신규] 당뇨병 페이지 스타일 --- */
+
+/* 헤더 페이지 네비게이션 */
+.page-nav {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.page-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.page-nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.page-nav a.active {
+    background: white;
+    color: #667eea;
+    font-weight: 500;
+}
+
+/* 섹션 공통 설명 */
+.section-description {
+    font-size: 1rem;
+    color: #718096;
+    margin-bottom: 25px;
+}
+
+/* 1. 혈당 측정 섹션 */
+.glucose-section {
     text-align: center;
 }
 
-.bp-display {
+.glucose-display-area {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -81,85 +120,65 @@ section h2 i {
     margin-bottom: 30px;
 }
 
-.bp-reading {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.systolic, .diastolic {
-    text-align: center;
-}
-
-.number {
+.glucose-display .number {
     font-size: 4rem;
     font-weight: 700;
     color: #667eea;
     display: block;
 }
 
-.unit {
+.glucose-display .unit {
     font-size: 1.2rem;
     color: #718096;
     display: block;
     margin-top: 5px;
 }
 
-.label {
-    font-size: 1rem;
-    color: #a0aec0;
-    display: block;
-    margin-top: 5px;
-}
-
-.divider {
-    font-size: 3rem;
-    color: #cbd5e0;
-    font-weight: 300;
-}
-
-.bp-status {
+.glucose-status {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-}
-
-.status-text {
     font-size: 1.2rem;
     font-weight: 500;
-    color: #38a169;
 }
 
-.bp-status i {
+.glucose-status i {
     font-size: 2rem;
-    color: #38a169;
 }
 
-.bp-input {
+/* 혈당 상태별 색상 (신호등) */
+.glucose-status.normal { color: #38a169; }
+.glucose-status.warning { color: #ed8936; }
+.glucose-status.danger { color: #e53e3e; }
+.glucose-status.low { color: #3182ce; }
+
+.glucose-input-area {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
     flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
-.bp-input input {
+.glucose-input-area input,
+.glucose-input-area select {
     padding: 12px 15px;
     border: 2px solid #e2e8f0;
     border-radius: 10px;
     font-size: 1rem;
-    width: 150px;
-    text-align: center;
+    width: 180px;
     transition: border-color 0.3s ease;
 }
 
-.bp-input input:focus {
+.glucose-input-area input:focus,
+.glucose-input-area select:focus {
     outline: none;
     border-color: #667eea;
 }
 
-.bp-input button {
+.glucose-input-area button {
     padding: 12px 25px;
     background: #667eea;
     color: white;
@@ -170,131 +189,237 @@ section h2 i {
     transition: background 0.3s ease;
 }
 
-.bp-input button:hover {
+.glucose-input-area button:hover {
     background: #5a67d8;
 }
 
-/* 심전도 섹션 스타일 */
-.ecg-container {
-    text-align: center;
-}
-
-#ecg-canvas {
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    background: #f7fafc;
-}
-
-.ecg-controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.ecg-controls button {
-    padding: 12px 25px;
-    background: #38a169;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.ecg-controls button:hover {
-    background: #2f855a;
-}
-
-.ecg-result {
+.glucose-analysis {
     padding: 20px;
     background: #f7fafc;
     border-radius: 10px;
     border-left: 4px solid #667eea;
 }
 
-/* 증상 체크리스트 스타일 */
-.checklist {
+/* 2. AI 식단 분석 섹션 */
+.meal-analysis-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
 }
 
-.symptom-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px;
-    background: #f7fafc;
+.meal-upload h3, .meal-result h3 {
+    color: #4a5568;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* 파일 업로드 버튼 커스텀 */
+#meal-image-input {
+    display: none; /* 실제 input은 숨김 */
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #38a169;
+    color: white;
     border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.file-upload-label:hover {
+    background: #2f855a;
+}
+
+.meal-preview-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+}
+
+#analyze-meal-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
     transition: background 0.3s ease;
 }
 
-.symptom-item:hover {
-    background: #edf2f7;
+#analyze-meal-btn:hover {
+    background: #c53030;
 }
 
-.symptom-item input[type="checkbox"] {
+#analyze-meal-btn:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+}
+
+/* AI 분석 결과 */
+.meal-analysis-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+    background: #f7fafc;
+    border-radius: 10px;
+    color: #a0aec0;
+    text-align: center;
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #667eea; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* AI 결과창 스타일 */
+.meal-result-status {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.meal-result-status.normal { background: #c6f6d5; color: #2f855a; }
+.meal-result-status.warning { background: #feebc8; color: #c05621; }
+.meal-result-status.danger { background: #fed7d7; color: #c53030; }
+
+.meal-result-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.meal-result-list li {
+    background: #f7fafc;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+.meal-result-list li strong {
+    color: #4a5568;
+}
+.meal-result-list li .normal { color: #38a169; }
+.meal-result-list li .warning { color: #ed8936; }
+.meal-result-list li .danger { color: #e53e3e; }
+
+
+.simple-bar-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 0 20px;
+}
+
+.bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.bar-item .bar {
+    width: 60px;
+    background: #a0aec0;
+    border-radius: 5px 5px 0 0;
+    transition: height 0.5s ease;
+}
+
+.bar-item .bar.normal { background: #38a169; }
+.bar-item .bar.warning { background: #ed8936; }
+.bar-item .bar.danger { background: #e53e3e; }
+
+.bar-item .bar-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.bar-item .bar-label {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+.meal-result-recommendation {
+    margin-top: 25px;
+    padding: 15px;
+    background: #ebf4ff;
+    border-left: 4px solid #3182ce;
+    color: #2c5282;
+}
+
+
+/* 3. GV 차트 섹션 */
+.chart-container {
+    height: 400px; /* 차트 높이 고정 */
+    position: relative;
+}
+
+/* 5. 체크리스트 모달 폼 */
+.checklist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 8px;
+}
+
+.form-group label {
+    flex-basis: 150px;
+    font-weight: 500;
+}
+
+.form-group input[type="number"],
+.form-group select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group input[type="checkbox"] {
     width: 20px;
     height: 20px;
     accent-color: #667eea;
 }
 
-.symptom-item label {
-    font-size: 1rem;
-    cursor: pointer;
-    flex: 1;
-}
 
-.symptoms-result {
-    padding: 20px;
-    background: #f7fafc;
-    border-radius: 10px;
-    text-align: center;
-    border-left: 4px solid #667eea;
-}
-
-/* 예방법 섹션 스타일 */
-.prevention-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.prevention-card {
-    text-align: center;
-    padding: 25px;
-    background: #f7fafc;
-    border-radius: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.prevention-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.prevention-card i {
-    font-size: 3rem;
-    color: #667eea;
-    margin-bottom: 15px;
-}
-
-.prevention-card h3 {
-    color: #4a5568;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-}
-
-.prevention-card p {
-    color: #718096;
-    line-height: 1.6;
-}
-
-/* 하단 버튼들 스타일 */
+/* --- 기존 하단 버튼 및 모달 (공통 사용) --- */
 .action-buttons {
     position: fixed;
     bottom: 20px;
@@ -312,9 +437,9 @@ section h2 i {
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
+/* ... (기존 .action-buttons button, .btn-primary, .modal 등 스타일) ... */
 .action-buttons button {
-    padding: 15px 30px;
+ar 15px 30px;
     border: none;
     border-radius: 15px;
     font-size: 1.1rem;
@@ -359,7 +484,6 @@ section h2 i {
     transform: translateY(-2px);
 }
 
-/* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
@@ -369,6 +493,7 @@ section h2 i {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
+    overflow: auto; /* 내용 길어지면 스크롤 */
 }
 
 .modal-content {
@@ -377,9 +502,9 @@ section h2 i {
     padding: 30px;
     border-radius: 20px;
     width: 80%;
-    max-width: 600px;
+    max-width: 700px; /* 모달 최대 너비 증가 */
     position: relative;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -398,14 +523,14 @@ section h2 i {
     color: #000;
 }
 
-/* 애니메이션 */
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+
+/* --- 반응형 디자인 --- */
+@media (max-width: 900px) {
+    .meal-analysis-content {
+        grid-template-columns: 1fr; /* 모바일에서 세로로 쌓기 */
+    }
 }
 
-/* 반응형 디자인 */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
@@ -415,23 +540,20 @@ section h2 i {
         font-size: 2rem;
     }
     
-    .bp-display {
+    .page-nav {
+        gap: 10px;
+    }
+
+    .page-nav a {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .glucose-display-area {
         flex-direction: column;
         gap: 20px;
     }
-    
-    .number {
-        font-size: 3rem;
-    }
-    
-    .checklist {
-        grid-template-columns: 1fr;
-    }
-    
-    .prevention-grid {
-        grid-template-columns: 1fr;
-    }
-    
+
     .action-buttons {
         flex-direction: column;
         align-items: center;
@@ -446,46 +568,14 @@ section h2 i {
         width: 100%;
         max-width: 300px;
     }
-    
-    #ecg-canvas {
-        width: 100%;
-        height: auto;
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+        padding: 20px;
     }
 }
-
-/* 혈압 상태별 색상 */
-.bp-status.high {
-    color: #e53e3e;
-}
-
-.bp-status.high .status-text,
-.bp-status.high i {
-    color: #e53e3e;
-}
-
-.bp-status.pre-high {
-    color: #ed8936;
-}
-
-.bp-status.pre-high .status-text,
-.bp-status.pre-high i {
-    color: #ed8936;
-}
-
-.bp-status.normal {
-    color: #38a169;
-}
-
-.bp-status.normal .status-text,
-.bp-status.normal i {
-    color: #38a169;
-}
-
-.bp-status.low {
-    color: #3182ce;
-}
-
-.bp-status.low .status-text,
 .bp-status.low i {
     color: #3182ce;
 }
+
