@@ -1,5 +1,7 @@
 // 전역 변수
 let gvChart = null; // 혈당 변동성 차트 인스턴스
+let modal = null; // 모달 엘리먼트 (공통)
+let modalContent = null; // 모달 콘텐츠 엘리먼트 (공통)
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
@@ -127,20 +129,14 @@ function analyzeMeal() {
     analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 분석 중...';
 
     // 2. (발표용) API 호출을 '가짜로' 시뮬레이션 (setTimeout 사용)
-    // 실제로는 여기서 `imageInput.files[0]`을 FormData에 담아
-    // 백엔드(/api/analyze-meal)로 보내고, 백엔드가 Vision API를 호출해야 함.
     setTimeout(() => {
         // 3. (가짜) 분석 완료 후 결과 표시
         const currentGlucose = parseInt(document.getElementById('glucose-display-value').textContent) || 100;
         
-        // (가짜) AI 분석 결과
         const recognizedFood = "쌀밥(1공기), 김치찌개, 계란말이";
         const totalCarbs = 85; // (가짜) 탄수화물 g
-        
-        // (가짜) 개인 보정치 적용
-        // (실제로는 '내 건강정보'의 BMI, 운동량 등을 기반으로 보정치 계산)
-        const correctionFactor = 1.2; // (예: 운동 부족으로 20% 더 오름)
-        const predictedIncrease = Math.round((totalCarbs * 0.5) * correctionFactor); // (초간단 가짜 공식)
+        const correctionFactor = 1.2; 
+        const predictedIncrease = Math.round((totalCarbs * 0.5) * correctionFactor);
         const predictedGlucose = currentGlucose + predictedIncrease;
 
         let status = 'warning';
@@ -164,12 +160,12 @@ function analyzeMeal() {
             <div class="simple-bar-chart">
                 <div class="bar-item">
                     <span class="bar-value">${currentGlucose}</span>
-                    <div class="bar" style="height: ${currentGlucose * 0.7}px;"></div>
+                    <div class="bar" style="height: ${Math.min(currentGlucose * 0.7, 180)}px;"></div>
                     <span class="bar-label">현재 혈당</span>
                 </div>
                 <div class="bar-item bar-predicted">
                     <span class="bar-value">${predictedGlucose}</span>
-                    <div class="bar ${status}" style="height: ${predictedGlucose * 0.7}px;"></div>
+                    <div class="bar ${status}" style="height: ${Math.min(predictedGlucose * 0.7, 180)}px;"></div>
                     <span class="bar-label">식사 2시간 후 예상</span>
                 </div>
             </div>
@@ -188,7 +184,27 @@ function analyzeMeal() {
 
 // 차트 초기화
 function initializeGVChart() {
+    if (!Chart) return; // Chart.js 로드 안됐으면 중단
     const ctx = document.getElementById('gv-chart-canvas').getContext('2d');
+    
+    // 차트 플러그인: 목표 범위 배경색
+    const targetRangePlugin = {
+        id: 'targetRange',
+        beforeDatasetsDraw(chart, args, options) {
+            const { ctx, chartArea: { left, right, top, bottom }, scales: { y } } = chart;
+            const yMin = options.yMin || 70;
+            const yMax = options.yMax || 180;
+            
+            const yMinPixel = y.getPixelForValue(yMin);
+            const yMaxPixel = y.getPixelForValue(yMax);
+            
+            ctx.save();
+            ctx.fillStyle = options.backgroundColor || 'rgba(56, 161, 105, 0.1)';
+            ctx.fillRect(left, yMaxPixel, right - left, yMinPixel - yMaxPixel);
+            ctx.restore();
+        }
+    };
+
     gvChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -198,7 +214,9 @@ function initializeGVChart() {
                 borderColor: '#667eea',
                 backgroundColor: '#667eea',
                 tension: 0.1,
-                fill: false
+                fill: false,
+                pointRadius: 4,
+                pointHoverRadius: 7
             }]
         },
         options: {
@@ -209,7 +227,10 @@ function initializeGVChart() {
                     type: 'time',
                     time: {
                         unit: 'day',
-                        tooltipFormat: 'yyyy-MM-dd HH:mm'
+                        tooltipFormat: 'yyyy-MM-dd HH:mm',
+                        displayFormats: {
+                            day: 'MM/dd'
+                        }
                     },
                     title: {
                         display: true,
@@ -222,27 +243,7 @@ function initializeGVChart() {
                         text: '혈당 (mg/dL)'
                     },
                     suggestedMin: 50,
-                    suggestedMax: 200,
-                    // 목표 범위 (예: 70-180)
-                    plugins: {
-                        annotation: {
-                            annotations: {
-                                line1: {
-                                    type: 'box',
-                                    yMin: 70,
-                                    yMax: 180,
-                                    backgroundColor: 'rgba(56, 161, 105, 0.1)',
-                                    borderColor: 'rgba(56, 161, 105, 0.3)',
-                                    borderWidth: 1,
-                                    label: {
-                                        content: '목표 범위',
-                                        display: true,
-                                        position: 'start'
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    suggestedMax: 200
                 }
             },
             plugins: {
@@ -256,14 +257,23 @@ function initializeGVChart() {
                             return ` ${d.y} mg/dL (${d.check_time_ko})`;
                         }
                     }
+                },
+                // 커스텀 플러그인 등록
+                targetRange: {
+                    yMin: 70,
+                    yMax: 180,
+                    backgroundColor: 'rgba(56, 161, 105, 0.1)'
                 }
             }
-        }
+        },
+        plugins: [targetRangePlugin] // 플러그인 인스턴스 추가
     });
 }
 
 // Supabase에서 혈당 기록 불러와 차트에 그리기
 async function loadAndDrawGVChart() {
+    if (!gvChart) return; // 차트가 없으면 중단
+
     try {
         const response = await fetch("/api/diabetes_logs"); // server.js에 만들 GET API
         if (!response.ok) throw new Error("데이터 로딩 실패");
@@ -275,8 +285,10 @@ async function loadAndDrawGVChart() {
             let timeLabel = '';
             switch(log.check_time) {
                 case 'fasting': timeLabel = '공복'; break;
+                case 'pre_meal': timeLabel = '식전'; break;
+                case 'post_meal_1hr': timeLabel = '식후 1시간'; break;
                 case 'post_meal_2hr': timeLabel = '식후 2시간'; break;
-                // ... (기타 라벨)
+                case 'before_sleep': timeLabel = '취침 전'; break;
                 default: timeLabel = log.check_time;
             }
             return {
@@ -321,13 +333,16 @@ async function saveDiabetesLog(glucose, checkTime) {
 
 
 // --- 5. 모달 기능 (공통) ---
-let modal = null;
 
 function setupModal() {
     modal = document.getElementById('modal');
+    modalContent = document.querySelector('.modal-content'); // .modal-content 저장
     const closeBtn = document.querySelector('.close');
     
-    closeBtn.onclick = closeModal;
+    // .close는 diabetes.html에 1개, index.html에 1개 있을 수 있으므로
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
     
     window.onclick = function(event) {
         if (event.target === modal) {
@@ -337,12 +352,20 @@ function setupModal() {
 }
 
 function closeModal() {
-    modal.style.display = 'none';
+    if (modal) {
+        modal.style.display = 'none';
+        // [수정] 모달이 닫힐 때, 'modal-lg' 클래스를 제거하여 기본 크기로 복원
+        if (modalContent) {
+            modalContent.classList.remove('modal-lg');
+        }
+    }
 }
 
 function openModal(content) {
-    document.getElementById('modal-body').innerHTML = content;
-    modal.style.display = 'block';
+    if (modal) {
+        document.getElementById('modal-body').innerHTML = content;
+        modal.style.display = 'block';
+    }
 }
 
 // (A) '내 건강정보 입력' (체크리스트) 모달
@@ -384,10 +407,14 @@ function showInitialChecklist() {
                 <label for="check-stress">최근 스트레스 (높음):</label>
                 <input type="checkbox" id="check-stress">
             </div>
-            <button class_name="btn-primary" style="padding: 12px 20px; background: #667eea; color: white; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer;" onclick="saveChecklist()">저장하기</button>
+            <button class="btn-primary" style="padding: 12px 20px; font-size: 1rem; cursor: pointer; width: 100%;" onclick="saveChecklist()">저장하기</button>
         </div>
     `;
     openModal(content);
+    // [수정] 체크리스트 모달을 열 때만 'modal-lg' 클래스를 추가
+    if (modalContent) {
+        modalContent.classList.add('modal-lg');
+    }
 }
 
 // (가짜) 체크리스트 저장
@@ -439,4 +466,5 @@ function showDiabetesInfo() {
         </div>
     `;
     openModal(content);
+    // [수정] 이 모달은 'modal-lg'가 필요 없으므로, (닫을 때) 제거 로직이 처리합니다.
 }
