@@ -979,3 +979,45 @@ section h2 i {
     color: #3182ce;
 
 }
+
+/* --- [신규] index.html 헤더 네비게이션 스타일 --- */
+/* (이 코드는 styles.css의 맨 뒤에 추가됩니다) */
+
+header .page-nav {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+header .page-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+header .page-nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* .active 클래스는 index.html에서만 사용됩니다 */
+header .page-nav a.active {
+    background: white;
+    color: #667eea; /* 고혈압 테마 색상과 일치 */
+    font-weight: 500;
+}
+
+/* 반응형에도 네비게이션 스타일 적용 */
+@media (max-width: 768px) {
+    header .page-nav {
+        gap: 10px;
+    }
+    header .page-nav a {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
