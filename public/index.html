@@ -1,18 +1,32 @@
 <!DOCTYPE html>
+
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고혈압 예방 및 관리 시스템</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>고혈압 예방 및 관리 시스템</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-heartbeat"></i> 고혈압 예방 및 관리 시스템</h1>
-            <p>심전도 데이터 기반 고혈압 예방과 건강 관리</p>
+
+    <div class="container">
+
+        <header>
+
+            <h1><i class="fas fa-heartbeat"></i> 고혈압 예방 및 관리 시스템</h1>
+
+            <p>심전도 데이터 기반 고혈압 예방과 건강 관리</p>
 
             <!-- [신규 추가] 페이지 이동 네비게이션 -->
             <nav class="page-nav">
@@ -21,156 +35,308 @@
             </nav>
             <!-- [여기까지 신규 추가] -->
 
-        </header>
+        </header>
 
-        <main>
-            <!-- 현재 혈압 표시 섹션 -->
-            <section class="blood-pressure-section">
-                <h2><i class="fas fa-tint"></i> 현재 혈압</h2>
-                <div class="bp-display">
-                    <div class="bp-reading">
-                        <div class="systolic">
-                            <span class="number" id="systolic">120</span>
-                            <span class="unit">mmHg</span>
-                            <span class="label">수축기</span>
-                        </div>
-                        <div class="divider">/</div>
-                        <div class="diastolic">
-                            <span class="number" id="diastolic">80</span>
-                            <span class="unit">mmHg</span>
-                            <span class="label">이완기</span>
-                        </div>
-                    </div>
-                    <div class="bp-status" id="bp-status">
-                        <span class="status-text">정상</span>
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                </div>
-                <div class="bp-input">
-                    <input type="number" id="systolic-input" placeholder="수축기 혈압" min="70" max="300">
-                    <span>/</span>
-                    <input type="number" id="diastolic-input" placeholder="이완기 혈압" min="40" max="200">
-                    <button onclick="updateBloodPressure()">혈압 입력</button>
-                </div>
-            </section>
 
-            <!-- 심전도 데이터 섹션 -->
-            <section class="ecg-section">
-                <h2><i class="fas fa-wave-square"></i> 심전도 데이터 분석</h2>
-                <div class="ecg-container">
-                    <canvas id="ecg-canvas" width="800" height="200"></canvas>
-                    <div class="ecg-controls">
-                        <button onclick="generateECG()">심전도 생성</button>
-                        <button onclick="analyzeECG()">분석하기</button>
-                    </div>
-                    <div class="ecg-result" id="ecg-result">
-                        <p>심전도를 생성하고 분석해보세요.</p>
-                    </div>
-                </div>
-            </section>
 
-            <!-- 증상 체크리스트 섹션 -->
-            <section class="symptoms-section">
-                <h2><i class="fas fa-clipboard-list"></i> 고혈압 의심 증상 체크리스트</h2>
-                <div class="checklist">
-                    <div class="symptom-item">
-                        <input type="checkbox" id="headache" onchange="checkSymptoms()">
-                        <label for="headache">두통 (특히 아침에 심함)</label>
-                    </div>
-                    <div class="symptom-item">
-                        <input type="checkbox" id="dizziness" onchange="checkSymptoms()">
-                        <label for="dizziness">어지러움</label>
-                    </div>
-          T         <div class="symptom-item">
-                        <input type="checkbox" id="chest-pain" onchange="checkSymptoms()">
-                        <label for="chest-pain">가슴 통증</label>
-                    </div>
-                    <div class="symptom-item">
-                        <input type="checkbox" id="shortness-breath" onchange="checkSymptoms()">
-                        <label for="shortness-breath">호흡 곤란</label>
-                    </div>
-                    <div class="symptom-item">
-                        <input type="checkbox" id="nosebleed" onchange="checkSymptoms()">
-                        <label for="nosebleed">코피</label>
-                    </div>
-                    <div class="symptom-item">
-                        <input type="checkbox" id="vision-problems" onchange="checkSymptoms()">
-                        <label for="vision-problems">시력 문제</label>
-                    </div>
-                    <div class="symptom-item">
-                        <input type="checkbox" id="irregular-heartbeat" onchange="checkSymptoms()">
-                        <label for="irregular-heartbeat">불규칙한 심박수</label>
-                    </div>
-                    <div class="symptom-item">
-                        <input type="checkbox" id="anxiety" onchange="checkSymptoms()">
-                        <label for="anxiety">불안감</label>
-                    </div>
-                </div>
-                <div class="symptoms-result" id="symptoms-result">
-                    <p>증상을 체크해주세요.</p>
-          T     </div>
-            </section>
+        <main>
 
-            <!-- 예방법 안내 섹션 -->
-            <section class="prevention-section">
-                <h2><i class="fas fa-shield-alt"></i> 고혈압 예방법</h2>
-                <div class="prevention-grid">
-                    <div class="prevention-card">
-                        <i class="fas fa-utensils"></i>
-                        <h3>식이 관리</h3>
-                        <p>나트륨 섭취 줄이기, DASH 다이어트, 과일과 채소 섭취 증가</p>
-        _         </div>
-                    <div class="prevention-card">
-                        <i class="fas fa-running"></i>
-                        <h3>운동</h3>
-                        <p>주 3-4회, 30분 이상의 유산소 운동, 걷기, 수영, 자전거</p>
-                    </div>
-                    <div class="prevention-card">
-                        <i class="fas fa-weight"></i>
-                        <h3>체중 관리</h3>
-                        <p>BMI 25 이하 유지, 복부 비만 예방</p>
-                    </div>
-                    <div class="prevention-card">
-                        <i class="fas fa-smoking-ban"></i>
-                        <h3>금연</h3>
-                        <p>흡연은 혈압을 상승시키고 심혈관 질환 위험 증가</p>
-                    </div>
-                    <div class="prevention-card">
-                        <i class="fas fa-wine-bottle"></i>
-                        <h3>알코올 제한</h3>
-                        <p>하루 1-2잔 이하, 여성은 1잔 이하</p>
-                    </div>
-                    <div class="prevention-card">
-                        <i class="fas fa-bed"></i>
-                        <h3>스트레스 관리</h3>
-                        <p>충분한 수면, 명상, 요가, 취미 활동</p>
-                    </div>
-                </div>
-          T </section>
-        </main>
+            <!-- 현재 혈압 표시 섹션 -->
 
-        <!-- 하단 버튼들 -->
-        <footer class="action-buttons">
-            <button class="btn-primary" onclick="showPreventionTips()">
-                <i class="fas fa-lightbulb"></i> 상세 예방법 보기
-            </button>
-            <button class="btn-emergency" onclick="callEmergency()">
-                <i class="fas fa-phone"></i> 119 신고
-            </button>
-            <button class="btn-info" onclick="showHealthInfo()">
-                <i class="fas fa-info-circle"></i> 건강 정보
-            </button>
-        </footer>
-    </div>
+            <section class="blood-pressure-section">
 
-    <!-- 모달 -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-Read           <div id="modal-body"></div>
-        </div>
-    </div>
+                <h2><i class="fas fa-tint"></i> 현재 혈압</h2>
 
-    <script src="scripts.js"></script>
+                <div class="bp-display">
+
+                    <div class="bp-reading">
+
+                        <div class="systolic">
+
+                            <span class="number" id="systolic">120</span>
+
+                            <span class="unit">mmHg</span>
+
+                            <span class="label">수축기</span>
+
+                        </div>
+
+                        <div class="divider">/</div>
+
+                        <div class="diastolic">
+
+                            <span class="number" id="diastolic">80</span>
+
+                            <span class="unit">mmHg</span>
+
+                            <span class="label">이완기</span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="bp-status" id="bp-status">
+
+                        <span class="status-text">정상</span>
+
+                        <i class="fas fa-check-circle"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="bp-input">
+
+                    <input type="number" id="systolic-input" placeholder="수축기 혈압" min="70" max="300">
+
+                    <span>/</span>
+
+                    <input type="number" id="diastolic-input" placeholder="이완기 혈압" min="40" max="200">
+
+                    <button onclick="updateBloodPressure()">혈압 입력</button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- 심전도 데이터 섹션 -->
+
+            <section class="ecg-section">
+
+                <h2><i class="fas fa-wave-square"></i> 심전도 데이터 분석</h2>
+
+                <div class="ecg-container">
+
+                    <canvas id="ecg-canvas" width="800" height="200"></canvas>
+
+                    <div class="ecg-controls">
+
+                        <button onclick="generateECG()">심전도 생성</button>
+
+                        <button onclick="analyzeECG()">분석하기</button>
+
+                    </div>
+
+                    <div class="ecg-result" id="ecg-result">
+
+                        <p>심전도를 생성하고 분석해보세요.</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- 증상 체크리스트 섹션 -->
+
+            <section class="symptoms-section">
+
+                <h2><i class="fas fa-clipboard-list"></i> 고혈압 의심 증상 체크리스트</h2>
+
+                <div class="checklist">
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="headache" onchange="checkSymptoms()">
+
+                        <label for="headache">두통 (특히 아침에 심함)</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="dizziness" onchange="checkSymptoms()">
+
+                        <label for="dizziness">어지러움</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="chest-pain" onchange="checkSymptoms()">
+
+                        <label for="chest-pain">가슴 통증</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="shortness-breath" onchange="checkSymptoms()">
+
+                        <label for="shortness-breath">호흡 곤란</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="nosebleed" onchange="checkSymptoms()">
+
+                        <label for="nosebleed">코피</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="vision-problems" onchange="checkSymptoms()">
+
+                        <label for="vision-problems">시력 문제</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="irregular-heartbeat" onchange="checkSymptoms()">
+
+                        <label for="irregular-heartbeat">불규칙한 심박수</label>
+
+                    </div>
+
+                    <div class="symptom-item">
+
+                        <input type="checkbox" id="anxiety" onchange="checkSymptoms()">
+
+                        <label for="anxiety">불안감</label>
+
+                    </div>
+
+                </div>
+
+                <div class="symptoms-result" id="symptoms-result">
+
+                    <p>증상을 체크해주세요.</p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- 예방법 안내 섹션 -->
+
+            <section class="prevention-section">
+
+                <h2><i class="fas fa-shield-alt"></i> 고혈압 예방법</h2>
+
+                <div class="prevention-grid">
+
+                    <div class="prevention-card">
+
+                        <i class="fas fa-utensils"></i>
+
+                        <h3>식이 관리</h3>
+
+                        <p>나트륨 섭취 줄이기, DASH 다이어트, 과일과 채소 섭취 증가</p>
+
+                    </div>
+
+                    <div class="prevention-card">
+
+                        <i class="fas fa-running"></i>
+
+                        <h3>운동</h3>
+
+                        <p>주 3-4회, 30분 이상의 유산소 운동, 걷기, 수영, 자전거</p>
+
+                    </div>
+
+                    <div class="prevention-card">
+
+                        <i class="fas fa-weight"></i>
+
+                        <h3>체중 관리</h3>
+
+                        <p>BMI 25 이하 유지, 복부 비만 예방</p>
+
+                    </div>
+
+                    <div class="prevention-card">
+
+                        <i class="fas fa-smoking-ban"></i>
+
+                        <h3>금연</h3>
+
+                        <p>흡연은 혈압을 상승시키고 심혈관 질환 위험 증가</p>
+
+                    </div>
+
+                    <div class="prevention-card">
+
+                        <i class="fas fa-wine-bottle"></i>
+
+                        <h3>알코올 제한</h3>
+
+                        <p>하루 1-2잔 이하, 여성은 1잔 이하</p>
+
+                    </div>
+
+                    <div class="prevention-card">
+
+                        <i class="fas fa-bed"></i>
+
+                        <h3>스트레스 관리</h3>
+
+                        <p>충분한 수면, 명상, 요가, 취미 활동</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+
+        <!-- 하단 버튼들 -->
+
+        <footer class="action-buttons">
+
+            <button class="btn-primary" onclick="showPreventionTips()">
+
+                <i class="fas fa-lightbulb"></i> 상세 예방법 보기
+
+            </button>
+
+            <button class="btn-emergency" onclick="callEmergency()">
+
+                <i class="fas fa-phone"></i> 119 신고
+
+            </button>
+
+            <button class="btn-info" onclick="showHealthInfo()">
+
+                <i class="fas fa-info-circle"></i> 건강 정보
+
+            </button>
+
+        </footer>
+
+    </div>
+
+
+
+    <!-- 모달 -->
+
+    <div id="modal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close">&times;</span>
+
+            <div id="modal-body"></div>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="scripts.js"></script>
+
 </body>
+
 </html>
