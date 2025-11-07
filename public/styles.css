@@ -197,7 +197,7 @@ section h2 i {
     padding: 12px 25px;
     background: #38a169;
     color: white;
-    border: none;
+  D border: none;
     border-radius: 10px;
     font-size: 1rem;
     cursor: pointer;
@@ -381,6 +381,8 @@ section h2 i {
     position: relative;
     max-height: 80vh;
     overflow-y: auto;
+    /* [신규] JS가 이 클래스를 추가/제거할 것입니다 */
+    transition: max-width 0.3s ease; 
 }
 
 .close {
@@ -431,7 +433,8 @@ section h2 i {
     .prevention-grid {
         grid-template-columns: 1fr;
     }
-   D
+    
+    /* [수정] 오타 'D'를 삭제했습니다. */
     .action-buttons {
         flex-direction: column;
         align-items: center;
@@ -490,7 +493,6 @@ section h2 i {
     color: #3182ce;
 }
 
-
 /* --- [신규] 당뇨병 페이지 (diabetes.html) 추가 스타일 --- */
 /* --- 이 이하는 기존 CSS와 충돌하지 않는 새 클래스들입니다 --- */
 
@@ -545,19 +547,8 @@ header .page-nav a.active {
 }
 
 /* .number, .unit 클래스는 기존 스타일 재활용 */
-.glucose-display .number {
-    font-size: 4rem;
-    font-weight: 700;
-    color: #667eea;
-    display: block;
-}
-
-.glucose-display .unit {
-    font-size: 1.2rem;
-    color: #718096;
-    display: block;
-    margin-top: 5px;
-}
+/* (기존 .number 스타일이 적용됩니다) */
+/* (기존 .unit 스타일이 적용됩니다) */
 
 .glucose-status {
     display: flex;
@@ -815,6 +806,11 @@ header .page-nav a.active {
 }
 
 /* 5. 모달 내부 체크리스트 폼 */
+/* [신규] 체크리스트 모달을 더 넓게 */
+.modal-content.modal-lg {
+    max-width: 700px;
+}
+
 .checklist-form {
     display: flex;
     flex-direction: column;
