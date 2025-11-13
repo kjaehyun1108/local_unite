@@ -240,7 +240,7 @@ function initializeGVChart() {
                         },
                         label: (context) => {
                             const d = context.raw;
-                            return ` ${d.y} mg/dL (${d.check_time_ko})`;
+                  S         return ` ${d.y} mg/dL (${d.check_time_ko})`;
                         }
                     }
                 },
