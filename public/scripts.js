@@ -1,8 +1,10 @@
 // --- [ 🚀 1. Supabase 클라이언트 설정 ] ---
 // (본인의 URL과 Anon Key로 수정하세요)
-const SUPABASE_URL = 'https://ttselmicsanmajuxeajq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0c2VsbWljc2FubWFqdXhlYWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyOTUyNDIsImV4cCI6MjA3Nzg3MTI0Mn0.-5djDYUwPCOmAi50sgyCrH65uBsnQoMLGUdJYxRjt5s';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+// [수정] CDN의 'supabase' 객체를 사용하여 'supabaseClient'라는 새 변수를 만듭니다.
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 전역 변수로 차트 객체 선언
 let bpChart = null;
@@ -95,22 +97,20 @@ function updateChartAndDisplay(newData) {
 
 // --- [ 🚀 5. (최초 로드) 페이지가 열릴 때 기존 데이터 불러오기 ] ---
 async function loadInitialData() {
-    // DB에서 최근 30개 데이터를 'created_at' (오래된 순)으로 가져오기
-    const { data, error } = await supabase
+    // [수정] supabase -> supabaseClient
+    const { data, error } = await supabaseClient
         .from('heart_beat_ai')
         .select('*')
-        .order('created_at', { ascending: false }) // [수정] 최신순으로 가져오기
-        .limit(30); // 30개만
+        .order('created_at', { ascending: false }) 
+        .limit(30);
 
     if (error) {
         console.error('데이터 로드 실패:', error);
         return;
     }
 
-    // 가져온 데이터를 (오래된 순)으로 다시 뒤집기 (차트에 순서대로 그리려고)
     const sortedData = data.reverse();
 
-    // 기존 데이터를 차트에 한 번에 그리기
     sortedData.forEach(record => {
         const timeLabel = new Date(record.created_at).toLocaleTimeString('ko-KR', {
             hour: '2-digit', minute: '2-digit', second: '2-digit'
@@ -120,7 +120,6 @@ async function loadInitialData() {
         bpChart.data.datasets[1].data.push(record.diastolic);
     });
     
-    // [중요] 가장 마지막(최신) 데이터로 상단 표시 업데이트
     if (sortedData.length > 0) {
         const latestData = sortedData[sortedData.length - 1];
         document.getElementById('systolic').textContent = latestData.systolic;
@@ -133,17 +132,17 @@ async function loadInitialData() {
 
 // --- [ 🚀 6. (실시간) Supabase Realtime 구독 ] ---
 function subscribeToNewData() {
-    supabase.channel('heartbeat_channel') // 채널 이름 (자유롭게 지정)
+    // [수정] supabase -> supabaseClient
+    supabaseClient.channel('heartbeat_channel') 
         .on(
-            'postgres_changes', // DB 변경 사항 감지
+            'postgres_changes', 
             { 
-                event: 'INSERT', // "INSERT" 이벤트만 감지
+                event: 'INSERT', 
                 schema: 'public', 
-                table: 'heart_beat_ai' // 'heart_beat_ai' 테이블 감시
+                table: 'heart_beat_ai' 
             },
             (payload) => {
                 console.log('새 데이터 수신!', payload.new);
-                // payload.new 에 방금 INSERT된 새 데이터가 들어있습니다.
                 updateChartAndDisplay(payload.new);
             }
         )
@@ -156,6 +155,7 @@ function subscribeToNewData() {
 // ==========================================================
 //   ▼▼▼ 기존 `scripts.js`에 있던 함수들 (재사용) ▼▼▼
 // ==========================================================
+// (이하 모든 기존 함수들은 수정 없이 그대로 둡니다)
 
 // [재사용] 혈압 상태 업데이트 (수정됨: 아이콘 클래스 수정)
 function updateBloodPressureStatus(systolic, diastolic) {
@@ -212,7 +212,7 @@ function checkSymptoms() {
             if (['chest-pain', 'shortness-breath', 'irregular-heartbeat'].includes(symptom)) {
                 severeSymptoms.push(symptom);
             }
-        }
+      *   }
     });
     
     const resultElement = document.getElementById('symptoms-result');
@@ -337,7 +337,7 @@ function callEmergency() {
             </div>
             <div style="margin: 20px 0; padding: 20px; background: #c6f6d5; border-radius: 10px;">
                 <h3>응급차 도착 전 안전 수칙</h3>
-              _B_R_   <ul style="margin: 10px 0; padding-left: 20px;">
+                <ul style="margin: 10px 0; padding-left: 20px;">
                     <li>안전한 장소에서 대기</li>
                     <li>갑작스러운 움직임 자제</li>
                     <li>증상 악화 시 즉시 재연락</li>
@@ -374,7 +374,7 @@ function showHealthInfo() {
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">정상</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 120</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 80</td>
-              _B_R_ </tr>
+                </tr>
                 <tr style="background: #f7fafc;">
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 전단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">120-139</td>
