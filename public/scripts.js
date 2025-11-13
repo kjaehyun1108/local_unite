@@ -1,7 +1,7 @@
 // --- [ 🚀 1. Supabase 클라이언트 설정 ] ---
 // (본인의 URL과 Anon Key로 수정하세요)
-const SUPABASE_URL = 'https://ttselmicsanmajuxeajq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0c2VsbWljc2FubWFqdXhlYWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyOTUyNDIsImV4cCI6MjA3Nzg3MTI0Mn0.-5djDYUwPCOmAi50sgyCrH65uBsnQoMLGUdJYxRjt5s';
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
 // [수정] CDN의 'supabase' 객체를 사용하여 'supabaseClient'라는 새 변수를 만듭니다.
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -26,7 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- [ 🚀 3. 실시간 차트 초기화 ] ---
 function initializeRealtimeChart() {
-    const ctx = document.getElementById('bpChart').getContext('2d');
+    // [수정] id가 'bpChart'인 캔버스를 찾습니다. (index.html에서 id를 확인하세요)
+    const chartElement = document.getElementById('bpChart');
+    if (!chartElement) {
+        console.error("차트를 그릴 <canvas id='bpChart'> 요소를 찾을 수 없습니다.");
+        return;
+    }
+    const ctx = chartElement.getContext('2d');
+    
     bpChart = new Chart(ctx, {
         type: 'line', // 라인 차트
         data: {
@@ -127,7 +134,10 @@ async function loadInitialData() {
         updateBloodPressureStatus(latestData.systolic, latestData.diastolic);
     }
     
-    bpChart.update(); // 차트 최종 업데이트
+    // [수정] bpChart가 null이 아닐 때만 업데이트
+    if (bpChart) {
+        bpChart.update(); // 차트 최종 업데이트
+    }
 }
 
 // --- [ 🚀 6. (실시간) Supabase Realtime 구독 ] ---
@@ -155,7 +165,6 @@ function subscribeToNewData() {
 // ==========================================================
 //   ▼▼▼ 기존 `scripts.js`에 있던 함수들 (재사용) ▼▼▼
 // ==========================================================
-// (이하 모든 기존 함수들은 수정 없이 그대로 둡니다)
 
 // [재사용] 혈압 상태 업데이트 (수정됨: 아이콘 클래스 수정)
 function updateBloodPressureStatus(systolic, diastolic) {
@@ -212,7 +221,7 @@ function checkSymptoms() {
             if (['chest-pain', 'shortness-breath', 'irregular-heartbeat'].includes(symptom)) {
                 severeSymptoms.push(symptom);
             }
-      *   }
+        } // <-- [수정] 문제의 ' * '가 있던 줄을 삭제했습니다.
     });
     
     const resultElement = document.getElementById('symptoms-result');
@@ -333,7 +342,7 @@ function callEmergency() {
                     <li>복용 중인 약물 목록</li>
                     <li>보험증 및 신분증</li>
                     <li>가족 연락처</li>
-                </ul>
+V             </ul>
             </div>
             <div style="margin: 20px 0; padding: 20px; background: #c6f6d5; border-radius: 10px;">
                 <h3>응급차 도착 전 안전 수칙</h3>
@@ -360,6 +369,7 @@ function showHealthInfo() {
         <div style="margin: 20px 0;">
             <h3>고혈압이란?</h3>
             <p>수축기 혈압 140mmHg 이상 또는 이완기 혈압 90mmHg 이상인 상태를 말합니다.</p>
+body {
         </div>
         
         <div style="margin: 20px 0;">
@@ -378,13 +388,13 @@ function showHealthInfo() {
                 <tr style="background: #f7fafc;">
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 전단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">120-139</td>
-                    <td style="border: 1px solid #e2e8f0; padding: 10px;">80-89</td>
+                  nbsp; <td style="border: 1px solid #e2e8f0; padding: 10px;">80-89</td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 1단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">140-159</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">90-99</td>
-                </tr>
+A             </tr>
                 <tr style="background: #f7fafc;">
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 2단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">≥ 160</td>
