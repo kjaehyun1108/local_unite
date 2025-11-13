@@ -13,11 +13,11 @@ let modalContent = null;
 document.addEventListener('DOMContentLoaded', function() {
     setupModal();
     initializeGVChart();
-    loadAndDrawGVChart(); // 페이지 로드 시 Supabase에서 데이터 불러와 차트 그리기
+    loadAndDrawGVChart(); 
 });
 
 // --- 1. 혈당 측정 및 분석 ---
-
+// (updateGlucoseReading, updateGlucoseStatus, updateGlucoseAnalysis 함수는 수정 없이 그대로 사용)
 async function updateGlucoseReading() {
     const glucoseInput = document.getElementById('glucose-input');
     const checkTimeSelect = document.getElementById('check-time-input');
@@ -29,24 +29,17 @@ async function updateGlucoseReading() {
         alert('올바른 혈당 값을 입력해주세요 (30 ~ 600)');
         return;
     }
-
-    // 1. 화면에 즉각적인 피드백 표시
     updateGlucoseStatus(glucose, checkTime);
     updateGlucoseAnalysis(glucose, checkTime);
-
-    // 2. Supabase에 데이터 저장 (수정됨)
     const success = await saveDiabetesLog(glucose, checkTime);
 
     if (success) {
-        // 3. 저장 성공 시, 차트 다시 그리기
         await loadAndDrawGVChart();
-        glucoseInput.value = ''; // 입력창 비우기
+        glucoseInput.value = ''; 
     } else {
-        alert('데이터 저장에 실패했습니다. 다시 시도해주세요.');
+        alert('데이터 저장에 실패했습니다. RLS 정책을 확인하세요.');
     }
 }
-
-// (이하 updateGlucoseStatus, updateGlucoseAnalysis 함수는 기존과 동일)
 function updateGlucoseStatus(glucose, checkTime) {
     const statusElement = document.getElementById('glucose-status');
     const statusIcon = statusElement.querySelector('i');
@@ -60,15 +53,15 @@ function updateGlucoseStatus(glucose, checkTime) {
     let icon = 'fa-check-circle';
     let text = '정상';
 
-    if (checkTime === 'fasting') { // 공복
+    if (checkTime === 'fasting') { 
         if (glucose >= 126) { status = 'danger'; icon = 'fa-exclamation-triangle'; text = '고혈당 (당뇨)'; }
         else if (glucose >= 100) { status = 'warning'; icon = 'fa-exclamation-circle'; text = '공복혈당장애'; }
         else if (glucose < 70) { status = 'low'; icon = 'fa-info-circle'; text = '저혈당 의심'; }
-    } else if (checkTime.includes('post_meal')) { // 식후
+    } else if (checkTime.includes('post_meal')) { 
         if (glucose >= 200) { status = 'danger'; icon = 'fa-exclamation-triangle'; text = '고혈당 (당뇨)'; }
         else if (glucose >= 140) { status = 'warning'; icon = 'fa-exclamation-circle'; text = '내당능장애'; }
         else if (glucose < 70) { status = 'low'; icon = 'fa-info-circle'; text = '저혈당 의심'; }
-    } else { // 식전, 취침 전 등
+    } else { 
         if (glucose >= 200) { status = 'danger'; icon = 'fa-exclamation-triangle'; text = '고혈당'; }
         else if (glucose >= 140) { status = 'warning'; icon = 'fa-exclamation-circle'; text = '주의'; }
         else if (glucose < 70) { status = 'low'; icon = 'fa-info-circle'; text = '저혈당 의심'; }
@@ -97,7 +90,7 @@ function updateGlucoseAnalysis(glucose, checkTime) {
 
 
 // --- 2. AI 식단 분석 (Mock-up) ---
-// (이 섹션은 Supabase와 무관하므로 기존과 동일)
+// (previewMealImage, analyzeMeal 함수는 수정 없이 그대로 사용)
 function previewMealImage(event) {
     const reader = new FileReader();
     reader.onload = function(){
@@ -116,7 +109,6 @@ function analyzeMeal() {
     const resultElement = document.getElementById('meal-analysis-result');
     const analyzeBtn = document.getElementById('analyze-meal-btn');
 
-    // 1. 로딩 상태 표시
     resultElement.innerHTML = `
         <div class="loading-spinner"></div>
         <p style="text-align: center; margin-top: 15px;">AI가 식단을 분석 중입니다...</p>
@@ -125,9 +117,7 @@ function analyzeMeal() {
     analyzeBtn.disabled = true;
     analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 분석 중...';
 
-    // 2. (발표용) API 호출 시뮬레이션
     setTimeout(() => {
-        // 3. (가짜) 분석 완료 후 결과 표시
         const currentGlucose = parseInt(document.getElementById('glucose-display-value').textContent) || 100;
         
         const recognizedFood = "쌀밥(1공기), 김치찌개, 계란말이";
@@ -179,7 +169,7 @@ function analyzeMeal() {
 
 
 // --- 3. 혈당 변동성(GV) 차트 ---
-// (initializeGVChart 함수는 기존과 동일)
+// (initializeGVChart 함수는 수정 없이 그대로 사용)
 function initializeGVChart() {
     if (!Chart) return; 
     const ctx = document.getElementById('gv-chart-canvas').getContext('2d');
@@ -266,23 +256,21 @@ function initializeGVChart() {
 }
 
 
-// --- 4. Supabase 연동 ---
+// --- 4. Supabase 연동 (수정됨) ---
 
-// [ 🚀 수정됨 ] Supabase에서 혈당 기록 불러와 차트에 그리기
+// [ 🚀 수정됨 ] Supabase에서 혈당 기록 불러오기
 async function loadAndDrawGVChart() {
     if (!gvChart) return; 
 
     try {
-        // [수정] /api/ 대신 Supabase에서 직접 GET
         const { data: dbData, error } = await supabaseClient
             .from('diabetes_logs') // Supabase 테이블 이름
             .select('*')
-            .order('created_at', { ascending: true }) // 시간순 정렬
-            .limit(100); // 최근 100개
+            .order('created_at', { ascending: true }) 
+            .limit(100); 
         
-        if (error) throw error; // 에러 발생 시 중단
+        if (error) throw error; 
 
-        // 차트 데이터 형식으로 변환
         const chartData = dbData.map(log => {
             let timeLabel = '';
             switch(log.check_time) {
@@ -294,13 +282,12 @@ async function loadAndDrawGVChart() {
                 default: timeLabel = log.check_time;
             }
             return {
-                x: new Date(log.created_at), // Supabase의 created_at 시간
+                x: new Date(log.created_at), 
                 y: log.glucose,
-                check_time_ko: timeLabel // 툴팁에 표시
+                check_time_ko: timeLabel 
             };
         });
 
-        // 차트 데이터 업데이트
         gvChart.data.datasets[0].data = chartData;
         gvChart.update();
 
@@ -310,10 +297,9 @@ async function loadAndDrawGVChart() {
 }
 
 
-// [ 🚀 수정됨 ] 혈당 데이터 저장 (POST)
+// [ 🚀 수정됨 ] 혈당 데이터 저장
 async function saveDiabetesLog(glucose, checkTime) {
     try {
-        // [수정] /api/ 대신 Supabase에 직접 POST
         const { error } = await supabaseClient
             .from('diabetes_logs') // Supabase 테이블 이름
             .insert([
@@ -323,8 +309,8 @@ async function saveDiabetesLog(glucose, checkTime) {
                 }
             ]);
 
-        if (error) throw error; // 에러 발생 시 중단
-        return true; // 성공 여부 (true/false) 반환
+        if (error) throw error; 
+        return true; 
 
     } catch (error) {
         console.error("데이터 저장 중 오류:", error);
@@ -334,7 +320,7 @@ async function saveDiabetesLog(glucose, checkTime) {
 
 
 // --- 5. 모달 기능 (공통) ---
-
+// [ 🚀 수정됨 ] 중앙 모달 스타일(display: block/none)로 되돌림
 function setupModal() {
     modal = document.getElementById('modal');
     modalContent = document.querySelector('.modal-content'); 
@@ -344,7 +330,6 @@ function setupModal() {
         closeBtn.onclick = closeModal;
     }
     
-    // [수정] 배경 클릭 시 닫기
     window.onclick = function(event) {
         if (event.target === modal) {
             closeModal();
@@ -352,13 +337,11 @@ function setupModal() {
     }
 }
 
-// [ 🚀 수정됨 ] 
+// [ 🚀 수정됨 ]
 function closeModal() {
     if (modal) {
-        // modal.style.display = 'none'; /* [삭제] */
-        modal.classList.remove('is-visible'); /* [추가] CSS 클래스로 제어 */
-        
-        if (modalContent) {
+        modal.style.display = 'none'; // 'is-visible' 클래스 대신 display 사용
+        if (modalContent) {
             modalContent.classList.remove('modal-lg');
         }
     }
@@ -368,11 +351,11 @@ function closeModal() {
 function openModal(content) {
     if (modal) {
         document.getElementById('modal-body').innerHTML = content;
-        // modal.style.display = 'block'; /* [삭제] */
-        modal.classList.add('is-visible'); /* [추가] CSS 클래스로 제어 */
+        modal.style.display = 'block'; // 'is-visible' 클래스 대신 display 사용
     }
 }
 
+// (showInitialChecklist, saveChecklist, showDiabetesInfo 함수는 수정 없이 그대로 사용)
 function showInitialChecklist() {
     const content = `
         <h2><i class="fas fa-clipboard-list"></i> 내 건강정보 (AI 보정치)</h2>
@@ -446,7 +429,7 @@ function showDiabetesInfo() {
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 140</td>
                 </tr>
                 <tr style="background: #f7fafc;">
-                <td style="border: 1px solid #e2e8f0; padding: 10px;">당뇨 전단계</td>
+                    <td style="border: 1px solid #e2e8f0; padding: 10px;">당뇨 전단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">100-125</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">140-199</td>
                 </tr>
