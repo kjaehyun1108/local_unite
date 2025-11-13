@@ -435,13 +435,13 @@ function showDiabetesInfo() {
                     <th style="border: 1px solid #e2e8f0; padding: 10px;">공복 혈당</th>
                     <th style="border: 1px solid #e2e8f0; padding: 10px;">식후 2시간</th>
                 </tr>
-              _B_R_   <tr>
+                <tr>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">정상</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 100</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 140</td>
                 </tr>
                 <tr style="background: #f7fafc;">
-nbsp;                 <td style="border: 1px solid #e2e8f0; padding: 10px;">당뇨 전단계</td>
+                <td style="border: 1px solid #e2e8f0; padding: 10px;">당뇨 전단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">100-125</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">140-199</td>
                 </tr>
