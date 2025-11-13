@@ -334,7 +334,6 @@ async function saveDiabetesLog(glucose, checkTime) {
 
 
 // --- 5. 모달 기능 (공통) ---
-// (이 섹션은 Supabase와 무관하므로 기존과 동일)
 
 function setupModal() {
     modal = document.getElementById('modal');
@@ -345,6 +344,7 @@ function setupModal() {
         closeBtn.onclick = closeModal;
     }
     
+    // [수정] 배경 클릭 시 닫기
     window.onclick = function(event) {
         if (event.target === modal) {
             closeModal();
@@ -352,19 +352,24 @@ function setupModal() {
     }
 }
 
+// [ 🚀 수정됨 ] 
 function closeModal() {
     if (modal) {
-        modal.style.display = 'none';
-        if (modalContent) {
+        // modal.style.display = 'none'; /* [삭제] */
+        modal.classList.remove('is-visible'); /* [추가] CSS 클래스로 제어 */
+        
+        if (modalContent) {
             modalContent.classList.remove('modal-lg');
         }
     }
 }
 
+// [ 🚀 수정됨 ]
 function openModal(content) {
     if (modal) {
         document.getElementById('modal-body').innerHTML = content;
-        modal.style.display = 'block';
+        // modal.style.display = 'block'; /* [삭제] */
+        modal.classList.add('is-visible'); /* [추가] CSS 클래스로 제어 */
     }
 }
 
