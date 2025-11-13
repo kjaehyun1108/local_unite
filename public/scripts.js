@@ -1,7 +1,7 @@
 // --- [ 🚀 1. Supabase 클라이언트 설정 ] ---
 // (본인의 URL과 Anon Key로 수정하세요)
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://ttselmicsanmajuxeajq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0c2VsbWljc2FubWFqdXhlYWpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyOTUyNDIsImV4cCI6MjA3Nzg3MTI0Mn0.-5djDYUwPCOmAi50sgyCrH65uBsnQoMLGUdJYxRjt5s';
 
 // [수정] CDN의 'supabase' 객체를 사용하여 'supabaseClient'라는 새 변수를 만듭니다.
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -420,3 +420,4 @@ function showHealthInfo() {
 // [삭제] 윈도우 리사이즈 함수 (ECG용이었으므로 제거)
 // [삭제] updateBloodPressure 함수 (수동 입력용이었으므로 제거)
 // [삭제] loadHeartBeats 함수 (Supabase 로직으로 대체되었으므로 제거)
+
