@@ -151,10 +151,10 @@ section h2 i {
     transform: translateY(-2px);
 }
 
-/* --- [수정] 모달 스타일 (styles.css와 동일한 중앙 모달로 되돌림) --- */
+/* --- [수정] 모달 스타일 (중앙 -> 하단 슬라이드 업) --- */
 
 .modal {
-    display: none; /* JS가 'block'으로 제어합니다 */
+    /* display: none; */ /* [삭제] JS가 제어하므로 삭제 */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -162,23 +162,47 @@ section h2 i {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
+
+    /* [추가] 하단 정렬을 위해 flex 사용 */
+    display: flex;
+    align-items: flex-end; /* 핵심: 모달 내용을 하단에 정렬 */
+
+    /* [추가] 부드러운 등장을 위한 애니메이션 준비 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* [추가] JS가 이 클래스를 추가/삭제하여 모달을 제어합니다 */
+.modal.is-visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-content {
     background-color: white;
-    margin: 5% auto; /* [핵심] 이것이 중앙 정렬 스타일입니다 */
+    /* margin: 5% auto; */ /* [삭제] 중앙 정렬 제거 */
     padding: 30px;
-    border-radius: 20px;
-    width: 80%;
-    max-width: 600px; /* 기본 모달 크기 */
-    position: relative;
-    max-height: 80vh;
+    /* border-radius: 20px; */ /* [수정] 아래에서 수정 */
+    width: 100%; /* [수정] 너비 100% */
+    /* max-width: 600px; */ /* [삭제] 최대 너비 제거 (하단 시트용) */
+    position: relative; /* [수정] absolute -> relative */
+    border-radius: 20px 20px 0 0; /* [추가] 상단 모서리만 둥글게 */
+    max-height: 90vh; /* [수정] 화면을 꽉 채우지 않도록 90% 높이 제한 */
     overflow-y: auto;
-    transition: max-width 0.3s ease; 
+   
+    /* [추가] 슬라이드 업 애니메이션 준비 */
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
 }
 
-/* (이하 .close 스타일은 기존과 동일) */
+/* [추가] 모달이 보일 때 modal-content를 위로 슬라이드 */
+.modal.is-visible .modal-content {
+    transform: translateY(0);
+}
+
 .close {
+    /* (기존 스타일과 동일, 수정 없음) */
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -192,46 +216,84 @@ section h2 i {
     color: #000;
 }
 
-/* (기존 .modal-lg 스타일은 그대로 사용) */
+/* [수정] 체크리스트(대형 모달) 스타일 */
 .modal-content.modal-lg {
-    max-width: 700px;
+    /* max-width: 700px; */ /* [삭제] 하단 시트에서는 이 너비 제한이 필요 없음 */
+    /* 필요시 높이를 더 크게 조절할 수 있습니다 */
+    max-height: 95vh;
 }
 
-/* (이하 @keyframes pulse 는 기존과 동일) */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+}
+
+/* --- [2] 당뇨병 전용 신규 스타일 --- */
+
+/* 헤더 - 페이지 이동 네비게이션 */
+header .page-nav {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+header .page-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+header .page-nav a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* .active 클래스는 diabetes.html에서만 사용됩니다 */
+header .page-nav a.active {
+    background: white;
+    color: #667eea;
+    font-weight: 500;
+}
+
 /* 섹션 공통 설명 텍스트 */
 .section-description {
-    font-size: 1rem;
-    color: #718096;
-    margin-top: -15px;
-    margin-bottom: 25px;
+    font-size: 1rem;
+    color: #718096;
+    margin-top: -15px;
+    margin-bottom: 25px;
 }
 
 /* 1. 혈당 측정 섹션 */
 .glucose-section {
-    text-align: center;
+    text-align: center;
 }
 
 .glucose-display-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 30px;
 }
 
 /* .number, .unit 클래스는 기존 스타일 재사용 */
 
 .glucose-status {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2rem;
-    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 
 .glucose-status i {
-    font-size: 2rem;
+    font-size: 2rem;
 }
 
 /* 혈당 신호등 색상 (신규) */
@@ -241,178 +303,178 @@ section h2 i {
 .glucose-status.low { color: #3182ce; } /* 파랑 */
 
 .glucose-input-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 .glucose-input-area input,
 .glucose-input-area select {
-    padding: 12px 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 1rem;
-    width: 180px;
-    transition: border-color 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    width: 180px;
+    transition: border-color 0.3s ease;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .glucose-input-area input:focus,
 .glucose-input-area select:focus {
-    outline: none;
-    border-color: #667eea;
+    outline: none;
+    border-color: #667eea;
 }
 
 .glucose-input-area button {
-    padding: 12px 25px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
+    padding: 12px 25px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .glucose-input-area button:hover {
-    background: #5a67d8;
+    background: #5a67d8;
 }
 
 .glucose-analysis {
-    padding: 20px;
-    background: #f7fafc;
-    border-radius: 10px;
-    border-left: 4px solid #667eea;
-    text-align: left;
+    padding: 20px;
+    background: #f7fafc;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    text-align: left;
 }
 
 /* 2. AI 식단 분석 */
 .meal-analysis-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
 }
 
 .meal-upload h3, .meal-result h3 {
-    color: #4a5568;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e2e8f0;
+    color: #4a5568;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 #meal-image-input {
-    display: none;
+    display: none;
 }
 
 .file-upload-label {
-    display: inline-block;
-    padding: 12px 20px;
-    background: #38a169;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.3s ease;
-    margin-bottom: 20px;
+    display: inline-block;
+    padding: 12px 20px;
+    background: #38a169;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .file-upload-label:hover {
-    background: #2f855a;
+    background: #2f855a;
 }
 
 .meal-preview-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 2px solid #e2e8f0;
-    margin-bottom: 20px;
-    background: #f7fafc;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+    background: #f7fafc;
 }
 
 #analyze-meal-btn {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    background: #e53e3e;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #analyze-meal-btn:hover {
-    background: #c53030;
+    background: #c53030;
 }
 
 #analyze-meal-btn:disabled {
-    background: #a0aec0;
-    cursor: not-allowed;
+    background: #a0aec0;
+    cursor: not-allowed;
 }
 
 /* AI 분석 결과창 */
 .meal-analysis-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-height: 300px;
-    background: #f7fafc;
-    border-radius: 10px;
-    color: #a0aec0;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+    background: #f7fafc;
+    border-radius: 10px;
+    color: #a0aec0;
+    text-align: center;
 }
 
 .loading-spinner {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #667eea;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #667eea;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .meal-result-status {
-    padding: 15px;
-    border-radius: 10px;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
 }
 .meal-result-status.normal { background: #c6f6d5; color: #2f855a; }
 .meal-result-status.warning { background: #feebc8; color: #c05621; }
 .meal-result-status.danger { background: #fed7d7; color: #c53030; }
 
 .meal-result-list {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 25px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
 }
 
 .meal-result-list li {
-    background: #f7fafc;
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-size: 1rem;
+    background: #f7fafc;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 1rem;
 }
 .meal-result-list li strong {
-    color: #4a5568;
+    color: #4a5568;
 }
 .meal-result-list li .normal { color: #38a169; }
 .meal-result-list li .warning { color: #ed8936; }
@@ -420,101 +482,101 @@ section h2 i {
 
 
 .simple-bar-chart {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 200px;
-    border-bottom: 2px solid #e2e8f0;
-    padding: 0 20px;
-    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 0 20px;
+    margin-top: 20px;
 }
 
 .bar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .bar-item .bar {
-    width: 60px;
-    background: #a0aec0;
-    border-radius: 5px 5px 0 0;
-    transition: height 0.5s ease;
+    width: 60px;
+    background: #a0aec0;
+    border-radius: 5px 5px 0 0;
+    transition: height 0.5s ease;
 }
 .bar-item .bar.normal { background: #38a169; }
 .bar-item .bar.warning { background: #ed8936; }
 .bar-item .bar.danger { background: #e53e3e; }
 
 .bar-item .bar-value {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #2d3748;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2d3748;
 }
 
 .bar-item .bar-label {
-    font-size: 0.9rem;
-    color: #718096;
+    font-size: 0.9rem;
+    color: #718096;
 }
 
 .meal-result-recommendation {
-    margin-top: 25px;
-    padding: 15px;
-    background: #ebf4ff;
-    border-left: 4px solid #3182ce;
-    color: #2c5282;
+    margin-top: 25px;
+    padding: 15px;
+    background: #ebf4ff;
+    border-left: 4px solid #3182ce;
+    color: #2c5282;
 }
 
 /* 3. GV 차트 섹션 */
 .chart-container {
-    height: 400px;
-    position: relative;
-    background: #f7fafc;
-    border-radius: 10px;
-    padding: 10px;
+    height: 400px;
+    position: relative;
+    background: #f7fafc;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 /* 5. 모달 내부 체크리스트 폼 */
 .modal-content.modal-lg {
-    max-width: 700px;
+    max-width: 700px;
 }
 
 .checklist-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: #f7fafc;
-    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 8px;
 }
 
 .form-group label {
-    flex-basis: 150px;
-    font-weight: 500;
-    font-size: 1rem;
-    flex-shrink: 0;
+    flex-basis: 150px;
+    font-weight: 500;
+    font-size: 1rem;
+    flex-shrink: 0;
 }
 
 .form-group input[type="number"],
 .form-group select {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: 'Noto Sans KR', sans-serif;
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .form-group input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #667eea;
+    width: 20px;
+    height: 20px;
+    accent-color: #667eea;
 }
 
 /* --- [3] 당뇨병 전용 반응형 스타일 --- */
@@ -527,12 +589,12 @@ section h2 i {
         font-size: 2rem;
     }
     
-    /* (공통 .number 스타일) */
+    /* (공통 .number 스타일) */
     .number {
         font-size: 3rem;
     }
     
-    /* (공통 .action-buttons 스타일) */
+    /* (공통 .action-buttons 스타일) */
     .action-buttons {
         flex-direction: column;
         align-items: center;
@@ -548,37 +610,114 @@ section h2 i {
         max-width: 300px;
     }
 
-    /* --- [신규] 당뇨병 반응형 규칙 --- */
+    /* --- [신규] 당뇨병 반응형 규칙 --- */
 
-    header .page-nav {
-        gap: 10px;
-    }
-    header .page-nav a {
-        padding: 8px 15px;
-        font-size: 0.9rem;
-    }
+    header .page-nav {
+        gap: 10px;
+    }
+    header .page-nav a {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
 
-    .glucose-display-area {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .meal-analysis-content {
-        grid-template-columns: 1fr;
-    }
+    .glucose-display-area {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .meal-analysis-content {
+        grid-template-columns: 1fr;
+    }
 
-    .form-group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    .form-group label {
-        flex-basis: auto;
-    }
-    .form-group input[type="number"],
-    .form-group select {
-        width: 100%;
-    }
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .form-group label {
+        flex-basis: auto;
+    }
+    .form-group input[type="number"],
+    .form-group select {
+        width: 100%;
+    }
 }
 /* (diabetes.css 파일 맨 아래에 이 코드를 추가하세요) */
 
+/* --- [추가] 하단 버튼들 스타일 (styles.css에서 복사) --- */
+.action-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.action-buttons button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+.btn-primary:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+}
+.btn-emergency {
+    background: #e53e3e;
+    color: white;
+    animation: pulse 2s infinite;
+}
+.btn-emergency:hover {
+    background: #c53030;
+    transform: translateY(-2px);
+}
+.btn-info {
+    background: #38a169;
+    color: white;
+}
+.btn-info:hover {
+    background: #2f855a;
+    transform: translateY(-2px);
+}
+
+/* (반응형) */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+        bottom: 15px;
+        left: 20px;
+        right: 20px;
+        transform: none;
+        width: auto;
+    }
+    
+    .action-buttons button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
