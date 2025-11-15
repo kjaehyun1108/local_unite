@@ -281,7 +281,7 @@ header .page-nav a.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 10px; /* 간격 10px로 수정 */
     flex-wrap: wrap;
     margin-bottom: 20px;
 }
@@ -289,10 +289,13 @@ header .page-nav a.active {
 .glucose-input-area input,
 .glucose-input-area select {
     padding: 12px 15px;
-    border: 2px solid #e2e8f0;
+    border: 1px solid #e2e8f0; /* 테두리 수정 */
+    background-color: #f7fafc; /* 배경색 추가 */
     border-radius: 10px;
     font-size: 1rem;
-    width: 180px;
+    width: auto; /* 너비 자동 조절 */
+    flex-grow: 1; /* 남는 공간 차지 */
+    max-width: 200px; /* 최대 너비 */
     transition: border-color 0.3s ease;
     font-family: 'Noto Sans KR', sans-serif;
 }
@@ -303,20 +306,23 @@ header .page-nav a.active {
     border-color: #667eea;
 }
 
+/* [수정] '측정값 저장' 버튼을 작고 심플하게 변경 */
 .glucose-input-area button {
-    padding: 12px 25px;
-    background: #667eea;
-    color: white;
-    border: none;
+    padding: 12px 20px;
+    background: #f1f5f9; /* 배경색 회색 계열로 */
+    color: #4a5568; /* 글자색 */
+    border: 1px solid #e2e8f0; /* 테두리 추가 */
     border-radius: 10px;
-    font-size: 1rem;
+    font-size: 0.9rem; /* 글자 크기 살짝 줄임 */
+    font-weight: 500;
     cursor: pointer;
     transition: background 0.3s ease;
     font-family: 'Noto Sans KR', sans-serif;
+    flex-grow: 0; /* 버튼은 늘어나지 않게 */
 }
 
 .glucose-input-area button:hover {
-    background: #5a67d8;
+    background: #e2e8f0; /* 호버 색상 */
 }
 
 .glucose-analysis {
@@ -347,18 +353,20 @@ header .page-nav a.active {
 
 .file-upload-label {
     display: inline-block;
-    padding: 12px 20px;
-    background: #38a169;
-    color: white;
-    border-radius: 10px;
+    padding: 0; /* 패딩 제거 */
+    background: none; /* 배경 제거 */
+    color: #667eea; /* 링크 색상 */
+    border: none; /* 테두리 제거 */
+    border-radius: 0;
     cursor: pointer;
     font-size: 1rem;
-    transition: background 0.3s ease;
+    font-weight: 500;
+    text-decoration: underline; /* 밑줄 추가 */
     margin-bottom: 20px;
 }
 
 .file-upload-label:hover {
-    background: #2f855a;
+    color: #5a67d8; /* 호버 색상 */
 }
 
 .meal-preview-image {
@@ -601,8 +609,12 @@ header .page-nav a.active {
     }
     
     .meal-analysis-content {
-        grid-template-columns: 1fr;
-    }
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        /* [추가] 컬럼 안의 내용이 위에서부터 시작하도록 정렬 */
+        align-items: start; 
+    }  
 
     .form-group {
         flex-direction: column;
