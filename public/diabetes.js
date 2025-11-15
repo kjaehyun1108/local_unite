@@ -5,22 +5,19 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
-// --- [ 🚀 1. 수정됨 ] Supabase 클라이언트 설정 (모두 삭제) ---
-// (서버에서 API를 호출하므로 클라이언트에서 키가 필요 없습니다)
-
-
 // --- (이하 기존 코드) ---
 let gvChart = null; 
 let modal = null; 
 let modalContent = null; 
 
 document.addEventListener('DOMContentLoaded', function() {
-    setupModal(); // [ 🚀 공통 모달 함수 호출 ]
+    setupModal();
     initializeGVChart();
-    loadAndDrawGVChart(); 
+    loadAndDrawGVChart(); // 페이지 로드 시 Supabase에서 데이터 불러와 차트 그리기
 });
 
 // --- 1. 혈당 측정 및 분석 ---
+
 async function updateGlucoseReading() {
     const glucoseInput = document.getElementById('glucose-input');
     const checkTimeSelect = document.getElementById('check-time-input');
@@ -32,20 +29,24 @@ async function updateGlucoseReading() {
         alert('올바른 혈당 값을 입력해주세요 (30 ~ 600)');
         return;
     }
+
+    // 1. 화면에 즉각적인 피드백 표시
     updateGlucoseStatus(glucose, checkTime);
     updateGlucoseAnalysis(glucose, checkTime);
-    
-    // [ 🚀 수정됨 ] 'fetch' API 호출로 변경
-    const success = await saveDiabetesLog(glucose, checkTime); 
+
+    // 2. Supabase에 데이터 저장 (수정됨)
+    const success = await saveDiabetesLog(glucose, checkTime);
 
     if (success) {
+        // 3. 저장 성공 시, 차트 다시 그리기
         await loadAndDrawGVChart();
-        glucoseInput.value = ''; 
+        glucoseInput.value = ''; // 입력창 비우기
     } else {
-        alert('데이터 저장에 실패했습니다. 서버 로그를 확인하세요.');
+        alert('데이터 저장에 실패했습니다. 다시 시도해주세요.');
     }
 }
 
+// (이하 updateGlucoseStatus, updateGlucoseAnalysis 함수는 기존과 동일)
 function updateGlucoseStatus(glucose, checkTime) {
     const statusElement = document.getElementById('glucose-status');
     const statusIcon = statusElement.querySelector('i');
@@ -59,15 +60,15 @@ function updateGlucoseStatus(glucose, checkTime) {
     let icon = 'fa-check-circle';
     let text = '정상';
 
-    if (checkTime === 'fasting') { 
+    if (checkTime === 'fasting') { // 공복
         if (glucose >= 126) { status = 'danger'; icon = 'fa-exclamation-triangle'; text = '고혈당 (당뇨)'; }
         else if (glucose >= 100) { status = 'warning'; icon = 'fa-exclamation-circle'; text = '공복혈당장애'; }
         else if (glucose < 70) { status = 'low'; icon = 'fa-info-circle'; text = '저혈당 의심'; }
-    } else if (checkTime.includes('post_meal')) { 
+    } else if (checkTime.includes('post_meal')) { // 식후
         if (glucose >= 200) { status = 'danger'; icon = 'fa-exclamation-triangle'; text = '고혈당 (당뇨)'; }
         else if (glucose >= 140) { status = 'warning'; icon = 'fa-exclamation-circle'; text = '내당능장애'; }
         else if (glucose < 70) { status = 'low'; icon = 'fa-info-circle'; text = '저혈당 의심'; }
-    } else { 
+    } else { // 식전, 취침 전 등
         if (glucose >= 200) { status = 'danger'; icon = 'fa-exclamation-triangle'; text = '고혈당'; }
         else if (glucose >= 140) { status = 'warning'; icon = 'fa-exclamation-circle'; text = '주의'; }
         else if (glucose < 70) { status = 'low'; icon = 'fa-info-circle'; text = '저혈당 의심'; }
@@ -96,6 +97,7 @@ function updateGlucoseAnalysis(glucose, checkTime) {
 
 
 // --- 2. AI 식단 분석 (Mock-up) ---
+// (이 섹션은 Supabase와 무관하므로 기존과 동일)
 function previewMealImage(event) {
     const reader = new FileReader();
     reader.onload = function(){
@@ -114,6 +116,7 @@ function analyzeMeal() {
     const resultElement = document.getElementById('meal-analysis-result');
     const analyzeBtn = document.getElementById('analyze-meal-btn');
 
+    // 1. 로딩 상태 표시
     resultElement.innerHTML = `
         <div class="loading-spinner"></div>
         <p style="text-align: center; margin-top: 15px;">AI가 식단을 분석 중입니다...</p>
@@ -122,7 +125,9 @@ function analyzeMeal() {
     analyzeBtn.disabled = true;
     analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 분석 중...';
 
+    // 2. (발표용) API 호출 시뮬레이션
     setTimeout(() => {
+        // 3. (가짜) 분석 완료 후 결과 표시
         const currentGlucose = parseInt(document.getElementById('glucose-display-value').textContent) || 100;
         
         const recognizedFood = "쌀밥(1공기), 김치찌개, 계란말이";
@@ -174,6 +179,7 @@ function analyzeMeal() {
 
 
 // --- 3. 혈당 변동성(GV) 차트 ---
+// (initializeGVChart 함수는 기존과 동일)
 function initializeGVChart() {
     if (!Chart) return; 
     const ctx = document.getElementById('gv-chart-canvas').getContext('2d');
@@ -260,17 +266,23 @@ function initializeGVChart() {
 }
 
 
-// --- 4. API 연동 (fetch 사용) ---
+// --- 4. Supabase 연동 ---
 
+// [ 🚀 수정됨 ] Supabase에서 혈당 기록 불러와 차트에 그리기
 async function loadAndDrawGVChart() {
     if (!gvChart) return; 
 
     try {
-        const response = await fetch("/api/diabetes_logs"); 
-        if (!response.ok) throw new Error("데이터 로딩 실패");
+        // [수정] /api/ 대신 Supabase에서 직접 GET
+        const { data: dbData, error } = await supabaseClient
+            .from('diabetes_logs') // Supabase 테이블 이름
+            .select('*')
+            .order('created_at', { ascending: true }) // 시간순 정렬
+            .limit(100); // 최근 100개
         
-        const dbData = await response.json();
+        if (error) throw error; // 에러 발생 시 중단
 
+        // 차트 데이터 형식으로 변환
         const chartData = dbData.map(log => {
             let timeLabel = '';
             switch(log.check_time) {
@@ -282,12 +294,13 @@ async function loadAndDrawGVChart() {
                 default: timeLabel = log.check_time;
             }
             return {
-                x: new Date(log.created_at), 
+                x: new Date(log.created_at), // Supabase의 created_at 시간
                 y: log.glucose,
-                check_time_ko: timeLabel 
+                check_time_ko: timeLabel // 툴팁에 표시
             };
         });
 
+        // 차트 데이터 업데이트
         gvChart.data.datasets[0].data = chartData;
         gvChart.update();
 
@@ -297,20 +310,21 @@ async function loadAndDrawGVChart() {
 }
 
 
+// [ 🚀 수정됨 ] 혈당 데이터 저장 (POST)
 async function saveDiabetesLog(glucose, checkTime) {
     try {
-        const response = await fetch("/api/diabetes_logs", { 
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                glucose: glucose,
-                check_time: checkTime
-            }),
-        });
+        // [수정] /api/ 대신 Supabase에 직접 POST
+        const { error } = await supabaseClient
+            .from('diabetes_logs') // Supabase 테이블 이름
+            .insert([
+                { 
+                    glucose: glucose,       // 'glucose' 컬럼
+                    check_time: checkTime   // 'check_time' 컬럼
+                }
+            ]);
 
-        return response.ok; // 성공 여부 (true/false) 반환
+        if (error) throw error; // 에러 발생 시 중단
+        return true; // 성공 여부 (true/false) 반환
 
     } catch (error) {
         console.error("데이터 저장 중 오류:", error);
@@ -320,7 +334,8 @@ async function saveDiabetesLog(glucose, checkTime) {
 
 
 // --- 5. 모달 기능 (공통) ---
-// [ 🚀 수정됨 ] styles.css와 동일한 중앙 모달 방식
+// (이 섹션은 Supabase와 무관하므로 기존과 동일)
+
 function setupModal() {
     modal = document.getElementById('modal');
     modalContent = document.querySelector('.modal-content'); 
@@ -353,7 +368,6 @@ function openModal(content) {
     }
 }
 
-// (당뇨병 페이지 전용 모달 함수들)
 function showInitialChecklist() {
     const content = `
         <h2><i class="fas fa-clipboard-list"></i> 내 건강정보 (AI 보정치)</h2>
@@ -421,13 +435,13 @@ function showDiabetesInfo() {
                     <th style="border: 1px solid #e2e8f0; padding: 10px;">공복 혈당</th>
                     <th style="border: 1px solid #e2e8f0; padding: 10px;">식후 2시간</th>
                 </tr>
-                <tr>
+              _B_R_   <tr>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">정상</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 100</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">&lt; 140</td>
                 </tr>
                 <tr style="background: #f7fafc;">
-                    <td style="border: 1px solid #e2e8f0; padding: 10px;">당뇨 전단계</td>
+nbsp;                 <td style="border: 1px solid #e2e8f0; padding: 10px;">당뇨 전단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">100-125</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">140-199</td>
                 </tr>
@@ -445,67 +459,4 @@ function showDiabetesInfo() {
         </div>
     `;
     openModal(content);
-}
-
-// [ 🚀 9. (당뇨병 전용) 모달 내부 체크리스트 폼 ]
-.checklist-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: #f7fafc;
-    border-radius: 8px;
-}
-.form-group label {
-    flex-basis: 150px;
-    font-weight: 500;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
-.form-group input[type="number"],
-.form-group select {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-.form-group input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #667eea;
-}
-
-// [ 🚀 10. (당뇨병 전용) 반응형 ]
-@media (max-width: 768px) {
-    .number {
-        font-size: 3rem;
-    }
-    .glucose-display-area {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .meal-analysis-content {
-        grid-template-columns: 1fr; /* 1-column on mobile */
-    }
-
-    .form-group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    .form-group label {
-        flex-basis: auto;
-    }
-    .form-group input[type="number"],
-    .form-group select {
-        width: 100%;
-    }
 }
