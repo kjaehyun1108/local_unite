@@ -1,610 +1,3577 @@
-/* --- [1] 베이스 스타일 --- */
-/* (styles.css의 내용을 그대로 가져와서 기본 디자인을 동일하게 맞춥니다) */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+
+
+    margin: 0;
+
+
+
+    padding: 0;
+
+
+
+    box-sizing: border-box;
+
+
+
 }
+
+
+
+
+
+
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    color: #333;
+
+
+
+    font-family: 'Noto Sans KR', sans-serif;
+
+
+
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+
+
+    min-height: 100vh;
+
+
+
+    color: #333;
+
+
+
 }
+
+
+
+
+
+
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+
+
+
+    max-width: 1200px;
+
+
+
+    margin: 0 auto;
+
+
+
+    padding: 20px;
+
+
+
 }
+
+
+
+
+
+
+
+/* 헤더 스타일 */
+
+
 
 header {
-    text-align: center;
-    margin-bottom: 40px;
-    color: white;
+
+
+
+    text-align: center;
+
+
+
+    margin-bottom: 40px;
+
+
+
+    color: white;
+
+
+
 }
+
+
+
+
+
+
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+
+
+
+    font-size: 2.5rem;
+
+
+
+    margin-bottom: 10px;
+
+
+
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+
+
+
 }
+
+
+
+
+
+
 
 header p {
-    font-size: 1.2rem;
-    opacity: 0.9;
+
+
+
+    font-size: 1.2rem;
+
+
+
+    opacity: 0.9;
+
+
+
 }
+
+
+
+
+
+
+
+/* 메인 섹션 스타일 */
+
+
 
 main {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding-bottom: 120px;
+
+
+
+    display: flex;
+
+
+
+    flex-direction: column;
+
+
+
+    gap: 30px;
+
+
+
+    padding-bottom: 120px; /* 하단 고정 버튼을 위한 여백 */
+
+
+
 }
+
+
+
+
+
+
 
 section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+
+
+
+    background: white;
+
+
+
+    border-radius: 20px;
+
+
+
+    padding: 30px;
+
+
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+
+
+    transition: transform 0.3s ease;
+
+
+
 }
+
+
+
+
+
+
 
 section:hover {
-    transform: translateY(-5px);
+
+
+
+    transform: translateY(-5px);
+
+
+
 }
+
+
+
+
+
+
 
 section h2 {
-    color: #4a5568;
-    margin-bottom: 25px;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+
+
+
+    color: #4a5568;
+
+
+
+    margin-bottom: 25px;
+
+
+
+    font-size: 1.5rem;
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 10px;
+
+
+
 }
+
+
+
+
+
+
 
 section h2 i {
-    color: #667eea;
+
+
+
+    color: #667eea;
+
+
+
 }
 
-/* (주의: .blood-pressure-section 등 고혈압 전용 클래스는 여기엔 필요 없습니다) */
-/* (기본 .number, .unit, .label 스타일은 당뇨병에서도 재사용합니다) */
-.number {
-    font-size: 4rem;
-    font-weight: 700;
-    color: #667eea;
-    display: block;
+
+
+
+
+
+
+/* 혈압 섹션 스타일 */
+
+
+
+.blood-pressure-section {
+
+
+
+    text-align: center;
+
+
+
 }
+
+
+
+
+
+
+
+.bp-display {
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    align-items: center;
+
+
+
+    gap: 40px;
+
+
+
+    margin-bottom: 30px;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-reading {
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.systolic, .diastolic {
+
+
+
+    text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+.number {
+
+
+
+    font-size: 4rem;
+
+
+
+    font-weight: 700;
+
+
+
+    color: #667eea;
+
+
+
+    display: block;
+
+
+
+}
+
+
+
+
+
+
 
 .unit {
-    font-size: 1.2rem;
-    color: #718096;
-    display: block;
-    margin-top: 5px;
+
+
+
+    font-size: 1.2rem;
+
+
+
+    color: #718096;
+
+
+
+    display: block;
+
+
+
+    margin-top: 5px;
+
+
+
 }
+
+
+
+
+
+
 
 .label {
-    font-size: 1rem;
-    color: #a0aec0;
-    display: block;
-    margin-top: 5px;
+
+
+
+    font-size: 1rem;
+
+
+
+    color: #a0aec0;
+
+
+
+    display: block;
+
+
+
+    margin-top: 5px;
+
+
+
 }
 
-/* (하단 버튼과 모달은 공통으로 사용) */
-.action-buttons {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+
+
+
+
+
+
+.divider {
+
+
+
+    font-size: 3rem;
+
+
+
+    color: #cbd5e0;
+
+
+
+    font-weight: 300;
+
+
+
 }
+
+
+
+
+
+
+
+.bp-status {
+
+
+
+    display: flex;
+
+
+
+    flex-direction: column;
+
+
+
+    align-items: center;
+
+
+
+    gap: 10px;
+
+
+
+}
+
+
+
+
+
+
+
+.status-text {
+
+
+
+    font-size: 1.2rem;
+
+
+
+    font-weight: 500;
+
+
+
+    color: #38a169;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-status i {
+
+
+
+    font-size: 2rem;
+
+
+
+    color: #38a169;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input {
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    align-items: center;
+
+
+
+    gap: 15px;
+
+
+
+    flex-wrap: wrap;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input input {
+
+
+
+    padding: 12px 15px;
+
+
+
+    border: 2px solid #e2e8f0;
+
+
+
+    border-radius: 10px;
+
+
+
+    font-size: 1rem;
+
+
+
+    width: 150px;
+
+
+
+    text-align: center;
+
+
+
+    transition: border-color 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input input:focus {
+
+
+
+    outline: none;
+
+
+
+    border-color: #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input button {
+
+
+
+    padding: 12px 25px;
+
+
+
+    background: #667eea;
+
+
+
+    color: white;
+
+
+
+    border: none;
+
+
+
+    border-radius: 10px;
+
+
+
+    font-size: 1rem;
+
+
+
+    cursor: pointer;
+
+
+
+    transition: background 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input button:hover {
+
+
+
+    background: #5a67d8;
+
+
+
+}
+
+
+
+
+
+
+
+/* 심전도 섹션 스타일 */
+
+
+
+.ecg-container {
+
+
+
+    text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+#ecg-canvas {
+
+
+
+    border: 2px solid #e2e8f0;
+
+
+
+    border-radius: 10px;
+
+
+
+    margin-bottom: 20px;
+
+
+
+    background: #f7fafc;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-controls {
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    gap: 15px;
+
+
+
+    margin-bottom: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-controls button {
+
+
+
+    padding: 12px 25px;
+
+
+
+    background: #38a169;
+
+
+
+    color: white;
+
+
+
+    border: none;
+
+
+
+    border-radius: 10px;
+
+
+
+    font-size: 1rem;
+
+
+
+    cursor: pointer;
+
+
+
+    transition: background 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-controls button:hover {
+
+
+
+    background: #2f855a;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-result {
+
+
+
+    padding: 20px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 10px;
+
+
+
+    border-left: 4px solid #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+/* 증상 체크리스트 스타일 */
+
+
+
+.checklist {
+
+
+
+    display: grid;
+
+
+
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+
+
+    gap: 15px;
+
+
+
+    margin-bottom: 25px;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item {
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 12px;
+
+
+
+    padding: 15px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 10px;
+
+
+
+    transition: background 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item:hover {
+
+
+
+    background: #edf2f7;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item input[type="checkbox"] {
+
+
+
+    width: 20px;
+
+
+
+    height: 20px;
+
+
+
+    accent-color: #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item label {
+
+
+
+    font-size: 1rem;
+
+
+
+    cursor: pointer;
+
+
+
+    flex: 1;
+
+
+
+}
+
+
+
+
+
+
+
+.symptoms-result {
+
+
+
+    padding: 20px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 10px;
+
+
+
+    text-align: center;
+
+
+
+    border-left: 4px solid #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+/* 예방법 섹션 스타일 */
+
+
+
+.prevention-grid {
+
+
+
+    display: grid;
+
+
+
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+
+
+    gap: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card {
+
+
+
+    text-align: center;
+
+
+
+    padding: 25px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 15px;
+
+
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card:hover {
+
+
+
+    transform: translateY(-5px);
+
+
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card i {
+
+
+
+    font-size: 3rem;
+
+
+
+    color: #667eea;
+
+
+
+    margin-bottom: 15px;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card h3 {
+
+
+
+    color: #4a5568;
+
+
+
+    margin-bottom: 15px;
+
+
+
+    font-size: 1.3rem;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card p {
+
+
+
+    color: #718096;
+
+
+
+    line-height: 1.6;
+
+
+
+}
+
+
+
+
+
+
+
+/* 하단 버튼들 스타일 */
+
+
+
+.action-buttons {
+
+
+
+    position: fixed;
+
+
+
+    bottom: 20px;
+
+
+
+    left: 50%;
+
+
+
+    transform: translateX(-50%);
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    gap: 20px;
+
+
+
+    flex-wrap: wrap;
+
+
+
+    z-index: 1000;
+
+
+
+    background: rgba(255, 255, 255, 0.95);
+
+
+
+    backdrop-filter: blur(10px);
+
+
+
+    padding: 20px;
+
+
+
+    border-radius: 20px;
+
+
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+
+
+}
+
+
+
+
+
+
 
 .action-buttons button {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 200px;
-    justify-content: center;
+
+
+
+    padding: 15px 30px;
+
+
+
+    border: none;
+
+
+
+    border-radius: 15px;
+
+
+
+    font-size: 1.1rem;
+
+
+
+    font-weight: 500;
+
+
+
+    cursor: pointer;
+
+
+
+    transition: all 0.3s ease;
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 10px;
+
+
+
+    min-width: 200px;
+
+
+
+    justify-content: center;
+
+
+
 }
+
+
+
+
+
+
 
 .btn-primary {
-    background: #667eea;
-    color: white;
+
+
+
+    background: #667eea;
+
+
+
+    color: white;
+
+
+
 }
+
+
+
+
+
+
+
 .btn-primary:hover {
-    background: #5a67d8;
-    transform: translateY(-2px);
+
+
+
+    background: #5a67d8;
+
+
+
+    transform: translateY(-2px);
+
+
+
 }
+
+
+
+
+
+
+
 .btn-emergency {
-    background: #e53e3e;
-    color: white;
-    animation: pulse 2s infinite;
+
+
+
+    background: #e53e3e;
+
+
+
+    color: white;
+
+
+
+    animation: pulse 2s infinite;
+
+
+
 }
+
+
+
+
+
+
+
 .btn-emergency:hover {
-    background: #c53030;
-    transform: translateY(-2px);
+
+
+
+    background: #c53030;
+
+
+
+    transform: translateY(-2px);
+
+
+
 }
+
+
+
+
+
+
+
 .btn-info {
-    background: #38a169;
-    color: white;
+
+
+
+    background: #38a169;
+
+
+
+    color: white;
+
+
+
 }
+
+
+
+
+
+
+
 .btn-info:hover {
-    background: #2f855a;
-    transform: translateY(-2px);
+
+
+
+    background: #2f855a;
+
+
+
+    transform: translateY(-2px);
+
+
+
 }
+
+
+
+
+
+
+
+/* 모달 스타일 */
+
+
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
+
+
+
+    display: none;
+
+
+
+    position: fixed;
+
+
+
+    z-index: 1000;
+
+
+
+    left: 0;
+
+
+
+    top: 0;
+
+
+
+    width: 100%;
+
+
+
+    height: 100%;
+
+
+
+    background-color: rgba(0,0,0,0.5);
+
+
+
 }
+
+
+
+
+
+
 
 .modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 30px;
-    border-radius: 20px;
-    width: 80%;
-    max-width: 600px;
-    position: relative;
-    max-height: 80vh;
-    overflow-y: auto;
-    transition: max-width 0.3s ease; /* JS가 .modal-lg를 제어 */
+
+
+
+    background-color: white;
+
+
+
+    margin: 5% auto;
+
+
+
+    padding: 30px;
+
+
+
+    border-radius: 20px;
+
+
+
+    width: 80%;
+
+
+
+    max-width: 600px;
+
+
+
+    position: relative;
+
+
+
+    max-height: 80vh;
+
+
+
+    overflow-y: auto;
+
+
+
 }
+
+
+
+
+
+
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 15px;
+
+
+
+    color: #aaa;
+
+
+
+    float: right;
+
+
+
+    font-size: 28px;
+
+
+
+    font-weight: bold;
+
+
+
+    cursor: pointer;
+
+
+
+    position: absolute;
+
+
+
+    right: 20px;
+
+
+
+    top: 15px;
+
+
+
 }
+
+
+
+
+
+
+
 .close:hover {
-    color: #000;
+
+
+
+    color: #000;
+
+
+
 }
+
+
+
+
+
+
+
+/* 애니메이션 */
+
+
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+
+
+
+    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
+
+
+
+    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+
+
+
+    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+
+
+
 }
 
-/* --- [2] 당뇨병 전용 신규 스타일 --- */
-
-/* 헤더 - 페이지 이동 네비게이션 */
-header .page-nav {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-header .page-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: background 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-header .page-nav a:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* .active 클래스는 diabetes.html에서만 사용됩니다 */
-header .page-nav a.active {
-    background: white;
-    color: #667eea;
-    font-weight: 500;
-}
-
-/* 섹션 공통 설명 텍스트 */
-.section-description {
-    font-size: 1rem;
-    color: #718096;
-    margin-top: -15px;
-    margin-bottom: 25px;
-}
-
-/* 1. 혈당 측정 섹션 */
-.glucose-section {
-    text-align: center;
-}
-
-.glucose-display-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: 30px;
-}
-
-/* .number, .unit 클래스는 기존 스타일 재사용 */
-
-.glucose-status {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2rem;
-    font-weight: 500;
-}
-
-.glucose-status i {
-    font-size: 2rem;
-}
-
-/* 혈당 신호등 색상 (신규) */
-.glucose-status.normal { color: #38a169; } /* 초록 */
-.glucose-status.warning { color: #ed8936; } /* 주황 */
-.glucose-status.danger { color: #e53e3e; } /* 빨강 */
-.glucose-status.low { color: #3182ce; } /* 파랑 */
-
-.glucose-input-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-.glucose-input-area input,
-.glucose-input-area select {
-    padding: 12px 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 1rem;
-    width: 180px;
-    transition: border-color 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.glucose-input-area input:focus,
-.glucose-input-area select:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.glucose-input-area button {
-    padding: 12px 25px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.glucose-input-area button:hover {
-    background: #5a67d8;
-}
-
-.glucose-analysis {
-    padding: 20px;
-    background: #f7fafc;
-    border-radius: 10px;
-    border-left: 4px solid #667eea;
-    text-align: left;
-}
-
-/* 2. AI 식단 분석 */
-.meal-analysis-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.meal-upload h3, .meal-result h3 {
-    color: #4a5568;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-#meal-image-input {
-    display: none;
-}
-
-.file-upload-label {
-    display: inline-block;
-    padding: 12px 20px;
-    background: #38a169;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.3s ease;
-    margin-bottom: 20px;
-}
-
-.file-upload-label:hover {
-    background: #2f855a;
-}
-
-.meal-preview-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 2px solid #e2e8f0;
-    margin-bottom: 20px;
-    background: #f7fafc;
-}
-
-#analyze-meal-btn {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    background: #e53e3e;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-#analyze-meal-btn:hover {
-    background: #c53030;
-}
-
-#analyze-meal-btn:disabled {
-    background: #a0aec0;
-    cursor: not-allowed;
-}
-
-/* AI 분석 결과창 */
-.meal-analysis-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-height: 300px;
-    background: #f7fafc;
-    border-radius: 10px;
-    color: #a0aec0;
-    text-align: center;
-}
-
-.loading-spinner {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #667eea;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.meal-result-status {
-    padding: 15px;
-    border-radius: 10px;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-align: center;
-}
-.meal-result-status.normal { background: #c6f6d5; color: #2f855a; }
-.meal-result-status.warning { background: #feebc8; color: #c05621; }
-.meal-result-status.danger { background: #fed7d7; color: #c53030; }
-
-.meal-result-list {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 25px;
-}
-
-.meal-result-list li {
-    background: #f7fafc;
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-size: 1rem;
-}
-.meal-result-list li strong {
-    color: #4a5568;
-}
-.meal-result-list li .normal { color: #38a169; }
-.meal-result-list li .warning { color: #ed8936; }
-.meal-result-list li .danger { color: #e53e3e; }
 
 
-.simple-bar-chart {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 200px;
-    border-bottom: 2px solid #e2e8f0;
-    padding: 0 20px;
-    margin-top: 20px;
-}
 
-.bar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
 
-.bar-item .bar {
-    width: 60px;
-    background: #a0aec0;
-    border-radius: 5px 5px 0 0;
-    transition: height 0.5s ease;
-}
-.bar-item .bar.normal { background: #38a169; }
-.bar-item .bar.warning { background: #ed8936; }
-.bar-item .bar.danger { background: #e53e3e; }
 
-.bar-item .bar-value {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #2d3748;
-}
 
-.bar-item .bar-label {
-    font-size: 0.9rem;
-    color: #718096;
-}
+/* 반응형 디자인 */
 
-.meal-result-recommendation {
-    margin-top: 25px;
-    padding: 15px;
-    background: #ebf4ff;
-    border-left: 4px solid #3182ce;
-    color: #2c5282;
-}
 
-/* 3. GV 차트 섹션 */
-.chart-container {
-    height: 400px;
-    position: relative;
-    background: #f7fafc;
-    border-radius: 10px;
-    padding: 10px;
-}
 
-/* 5. 모달 내부 체크리스트 폼 */
-.modal-content.modal-lg {
-    max-width: 700px;
-}
-
-.checklist-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: #f7fafc;
-    border-radius: 8px;
-}
-
-.form-group label {
-    flex-basis: 150px;
-    font-weight: 500;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
-
-.form-group input[type="number"],
-.form-group select {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.form-group input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #667eea;
-}
-
-/* --- [3] 당뇨병 전용 반응형 스타일 --- */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
-    
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    /* (공통 .number 스타일) */
-    .number {
-        font-size: 3rem;
-    }
-    
-    /* (공통 .action-buttons 스타일) */
-    .action-buttons {
-        flex-direction: column;
-        align-items: center;
-        bottom: 15px;
-        left: 20px;
-        right: 20px;
-        transform: none;
-        width: auto;
-    }
-    
-    .action-buttons button {
-        width: 100%;
-        max-width: 300px;
-    }
 
-    /* --- [신규] 당뇨병 반응형 규칙 --- */
 
-    header .page-nav {
-        gap: 10px;
-    }
-    header .page-nav a {
-        padding: 8px 15px;
-        font-size: 0.9rem;
-    }
 
-    .glucose-display-area {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .meal-analysis-content {
-        grid-template-columns: 1fr;
-    }
+    .container {
 
-    .form-group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-    .form-group label {
-        flex-basis: auto;
-    }
-    .form-group input[type="number"],
-    .form-group select {
-        width: 100%;
-    }
+
+
+        padding: 15px;
+
+
+
+    }
+
+
+
+    
+
+
+
+    header h1 {
+
+
+
+        font-size: 2rem;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .bp-display {
+
+
+
+        flex-direction: column;
+
+
+
+        gap: 20px;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .number {
+
+
+
+        font-size: 3rem;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .checklist {
+
+
+
+        grid-template-columns: 1fr;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .prevention-grid {
+
+
+
+        grid-template-columns: 1fr;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .action-buttons {
+
+
+
+        flex-direction: column;
+
+
+
+        align-items: center;
+
+
+
+        bottom: 15px;
+
+
+
+        left: 20px;
+
+
+
+        right: 20px;
+
+
+
+        transform: none;
+
+
+
+        width: auto;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .action-buttons button {
+
+
+
+        width: 100%;
+
+
+
+        max-width: 300px;
+
+
+
+    }* {
+
+
+
+    margin: 0;
+
+
+
+    padding: 0;
+
+
+
+    box-sizing: border-box;
+
+
+
 }
+
+
+
+
+
+
+
+body {
+
+
+
+    font-family: 'Noto Sans KR', sans-serif;
+
+
+
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+
+
+    min-height: 100vh;
+
+
+
+    color: #333;
+
+
+
+}
+
+
+
+
+
+
+
+.container {
+
+
+
+    max-width: 1200px;
+
+
+
+    margin: 0 auto;
+
+
+
+    padding: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+/* 헤더 스타일 */
+
+
+
+header {
+
+
+
+    text-align: center;
+
+
+
+    margin-bottom: 40px;
+
+
+
+    color: white;
+
+
+
+}
+
+
+
+
+
+
+
+header h1 {
+
+
+
+    font-size: 2.5rem;
+
+
+
+    margin-bottom: 10px;
+
+
+
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+
+
+
+}
+
+
+
+
+
+
+
+header p {
+
+
+
+    font-size: 1.2rem;
+
+
+
+    opacity: 0.9;
+
+
+
+}
+
+
+
+
+
+
+
+/* 메인 섹션 스타일 */
+
+
+
+main {
+
+
+
+    display: flex;
+
+
+
+    flex-direction: column;
+
+
+
+    gap: 30px;
+
+
+
+    padding-bottom: 120px; /* 하단 고정 버튼을 위한 여백 */
+
+
+
+}
+
+
+
+
+
+
+
+section {
+
+
+
+    background: white;
+
+
+
+    border-radius: 20px;
+
+
+
+    padding: 30px;
+
+
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+
+
+    transition: transform 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+section:hover {
+
+
+
+    transform: translateY(-5px);
+
+
+
+}
+
+
+
+
+
+
+
+section h2 {
+
+
+
+    color: #4a5568;
+
+
+
+    margin-bottom: 25px;
+
+
+
+    font-size: 1.5rem;
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 10px;
+
+
+
+}
+
+
+
+
+
+
+
+section h2 i {
+
+
+
+    color: #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+/* 혈압 섹션 스타일 */
+
+
+
+.blood-pressure-section {
+
+
+
+    text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-display {
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    align-items: center;
+
+
+
+    gap: 40px;
+
+
+
+    margin-bottom: 30px;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-reading {
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.systolic, .diastolic {
+
+
+
+    text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+.number {
+
+
+
+    font-size: 4rem;
+
+
+
+    font-weight: 700;
+
+
+
+    color: #667eea;
+
+
+
+    display: block;
+
+
+
+}
+
+
+
+
+
+
+
+.unit {
+
+
+
+    font-size: 1.2rem;
+
+
+
+    color: #718096;
+
+
+
+    display: block;
+
+
+
+    margin-top: 5px;
+
+
+
+}
+
+
+
+
+
+
+
+.label {
+
+
+
+    font-size: 1rem;
+
+
+
+    color: #a0aec0;
+
+
+
+    display: block;
+
+
+
+    margin-top: 5px;
+
+
+
+}
+
+
+
+
+
+
+
+.divider {
+
+
+
+    font-size: 3rem;
+
+
+
+    color: #cbd5e0;
+
+
+
+    font-weight: 300;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-status {
+
+
+
+    display: flex;
+
+
+
+    flex-direction: column;
+
+
+
+    align-items: center;
+
+
+
+    gap: 10px;
+
+
+
+}
+
+
+
+
+
+
+
+.status-text {
+
+
+
+    font-size: 1.2rem;
+
+
+
+    font-weight: 500;
+
+
+
+    color: #38a169;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-status i {
+
+
+
+    font-size: 2rem;
+
+
+
+    color: #38a169;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input {
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    align-items: center;
+
+
+
+    gap: 15px;
+
+
+
+    flex-wrap: wrap;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input input {
+
+
+
+    padding: 12px 15px;
+
+
+
+    border: 2px solid #e2e8f0;
+
+
+
+    border-radius: 10px;
+
+
+
+    font-size: 1rem;
+
+
+
+    width: 150px;
+
+
+
+    text-align: center;
+
+
+
+    transition: border-color 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input input:focus {
+
+
+
+    outline: none;
+
+
+
+    border-color: #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input button {
+
+
+
+    padding: 12px 25px;
+
+
+
+    background: #667eea;
+
+
+
+    color: white;
+
+
+
+    border: none;
+
+
+
+    border-radius: 10px;
+
+
+
+    font-size: 1rem;
+
+
+
+    cursor: pointer;
+
+
+
+    transition: background 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.bp-input button:hover {
+
+
+
+    background: #5a67d8;
+
+
+
+}
+
+
+
+
+
+
+
+/* 심전도 섹션 스타일 */
+
+
+
+.ecg-container {
+
+
+
+    text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+#ecg-canvas {
+
+
+
+    border: 2px solid #e2e8f0;
+
+
+
+    border-radius: 10px;
+
+
+
+    margin-bottom: 20px;
+
+
+
+    background: #f7fafc;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-controls {
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    gap: 15px;
+
+
+
+    margin-bottom: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-controls button {
+
+
+
+    padding: 12px 25px;
+
+
+
+    background: #38a169;
+
+
+
+    color: white;
+
+
+
+    border: none;
+
+
+
+    border-radius: 10px;
+
+
+
+    font-size: 1rem;
+
+
+
+    cursor: pointer;
+
+
+
+    transition: background 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-controls button:hover {
+
+
+
+    background: #2f855a;
+
+
+
+}
+
+
+
+
+
+
+
+.ecg-result {
+
+
+
+    padding: 20px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 10px;
+
+
+
+    border-left: 4px solid #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+/* 증상 체크리스트 스타일 */
+
+
+
+.checklist {
+
+
+
+    display: grid;
+
+
+
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+
+
+    gap: 15px;
+
+
+
+    margin-bottom: 25px;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item {
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 12px;
+
+
+
+    padding: 15px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 10px;
+
+
+
+    transition: background 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item:hover {
+
+
+
+    background: #edf2f7;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item input[type="checkbox"] {
+
+
+
+    width: 20px;
+
+
+
+    height: 20px;
+
+
+
+    accent-color: #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+.symptom-item label {
+
+
+
+    font-size: 1rem;
+
+
+
+    cursor: pointer;
+
+
+
+    flex: 1;
+
+
+
+}
+
+
+
+
+
+
+
+.symptoms-result {
+
+
+
+    padding: 20px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 10px;
+
+
+
+    text-align: center;
+
+
+
+    border-left: 4px solid #667eea;
+
+
+
+}
+
+
+
+
+
+
+
+/* 예방법 섹션 스타일 */
+
+
+
+.prevention-grid {
+
+
+
+    display: grid;
+
+
+
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+
+
+    gap: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card {
+
+
+
+    text-align: center;
+
+
+
+    padding: 25px;
+
+
+
+    background: #f7fafc;
+
+
+
+    border-radius: 15px;
+
+
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card:hover {
+
+
+
+    transform: translateY(-5px);
+
+
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card i {
+
+
+
+    font-size: 3rem;
+
+
+
+    color: #667eea;
+
+
+
+    margin-bottom: 15px;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card h3 {
+
+
+
+    color: #4a5568;
+
+
+
+    margin-bottom: 15px;
+
+
+
+    font-size: 1.3rem;
+
+
+
+}
+
+
+
+
+
+
+
+.prevention-card p {
+
+
+
+    color: #718096;
+
+
+
+    line-height: 1.6;
+
+
+
+}
+
+
+
+
+
+
+
+/* 하단 버튼들 스타일 */
+
+
+
+.action-buttons {
+
+
+
+    position: fixed;
+
+
+
+    bottom: 20px;
+
+
+
+    left: 50%;
+
+
+
+    transform: translateX(-50%);
+
+
+
+    display: flex;
+
+
+
+    justify-content: center;
+
+
+
+    gap: 20px;
+
+
+
+    flex-wrap: wrap;
+
+
+
+    z-index: 1000;
+
+
+
+    background: rgba(255, 255, 255, 0.95);
+
+
+
+    backdrop-filter: blur(10px);
+
+
+
+    padding: 20px;
+
+
+
+    border-radius: 20px;
+
+
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+
+
+}
+
+
+
+
+
+
+
+.action-buttons button {
+
+
+
+    padding: 15px 30px;
+
+
+
+    border: none;
+
+
+
+    border-radius: 15px;
+
+
+
+    font-size: 1.1rem;
+
+
+
+    font-weight: 500;
+
+
+
+    cursor: pointer;
+
+
+
+    transition: all 0.3s ease;
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    gap: 10px;
+
+
+
+    min-width: 200px;
+
+
+
+    justify-content: center;
+
+
+
+}
+
+
+
+
+
+
+
+.btn-primary {
+
+
+
+    background: #667eea;
+
+
+
+    color: white;
+
+
+
+}
+
+
+
+
+
+
+
+.btn-primary:hover {
+
+
+
+    background: #5a67d8;
+
+
+
+    transform: translateY(-2px);
+
+
+
+}
+
+
+
+
+
+
+
+.btn-emergency {
+
+
+
+    background: #e53e3e;
+
+
+
+    color: white;
+
+
+
+    animation: pulse 2s infinite;
+
+
+
+}
+
+
+
+
+
+
+
+.btn-emergency:hover {
+
+
+
+    background: #c53030;
+
+
+
+    transform: translateY(-2px);
+
+
+
+}
+
+
+
+
+
+
+
+.btn-info {
+
+
+
+    background: #38a169;
+
+
+
+    color: white;
+
+
+
+}
+
+
+
+
+
+
+
+.btn-info:hover {
+
+
+
+    background: #2f855a;
+
+
+
+    transform: translateY(-2px);
+
+
+
+}
+
+
+
+
+
+
+
+/* 모달 스타일 */
+
+
+
+.modal {
+
+
+
+    display: none;
+
+
+
+    position: fixed;
+
+
+
+    z-index: 1000;
+
+
+
+    left: 0;
+
+
+
+    top: 0;
+
+
+
+    width: 100%;
+
+
+
+    height: 100%;
+
+
+
+    background-color: rgba(0,0,0,0.5);
+
+
+
+}
+
+
+
+
+
+
+
+.modal-content {
+
+
+
+    background-color: white;
+
+
+
+    margin: 5% auto;
+
+
+
+    padding: 30px;
+
+
+
+    border-radius: 20px;
+
+
+
+    width: 80%;
+
+
+
+    max-width: 600px;
+
+
+
+    position: relative;
+
+
+
+    max-height: 80vh;
+
+
+
+    overflow-y: auto;
+
+
+
+}
+
+
+
+
+
+
+
+.close {
+
+
+
+    color: #aaa;
+
+
+
+    float: right;
+
+
+
+    font-size: 28px;
+
+
+
+    font-weight: bold;
+
+
+
+    cursor: pointer;
+
+
+
+    position: absolute;
+
+
+
+    right: 20px;
+
+
+
+    top: 15px;
+
+
+
+}
+
+
+
+
+
+
+
+.close:hover {
+
+
+
+    color: #000;
+
+
+
+}
+
+
+
+
+
+
+
+/* 애니메이션 */
+
+
+
+@keyframes pulse {
+
+
+
+    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7); }
+
+
+
+    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+
+
+
+    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+
+
+
+}
+
+
+
+
+
+
+
+/* 반응형 디자인 */
+
+
+
+@media (max-width: 768px) {
+
+
+
+    .container {
+
+
+
+        padding: 15px;
+
+
+
+    }
+
+
+
+    
+
+
+
+    header h1 {
+
+
+
+        font-size: 2rem;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .bp-display {
+
+
+
+        flex-direction: column;
+
+
+
+        gap: 20px;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .number {
+
+
+
+        font-size: 3rem;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .checklist {
+
+
+
+        grid-template-columns: 1fr;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .prevention-grid {
+
+
+
+        grid-template-columns: 1fr;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .action-buttons {
+
+
+
+        flex-direction: column;
+
+
+
+        align-items: center;
+
+
+
+        bottom: 15px;
+
+
+
+        left: 20px;
+
+
+
+        right: 20px;
+
+
+
+        transform: none;
+
+
+
+        width: auto;
+
+
+
+    }
+
+
+
+    
+
+
+
+    .action-buttons button {
+
+
+
+        width: 100%;
+
+
+
+        max-width: 300px;
+
+
+
+    }
