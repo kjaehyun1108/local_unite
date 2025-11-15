@@ -106,7 +106,8 @@ function previewMealImage(event) {
     }
     reader.readAsDataURL(event.target.files[0]);
 }
-function analyzeMeal() {
+// (B) '이 식단 분석하기' 버튼 클릭 (fetch 방식으로 수정)
+async function analyzeMeal() {
     const imageInput = document.getElementById('meal-image-input');
     if (imageInput.files.length === 0) {
         alert('먼저 식단 사진을 업로드해주세요.');
@@ -115,66 +116,72 @@ function analyzeMeal() {
 
     const resultElement = document.getElementById('meal-analysis-result');
     const analyzeBtn = document.getElementById('analyze-meal-btn');
+    const file = imageInput.files[0];
+    const currentGlucose = parseInt(document.getElementById('glucose-display-value').textContent) || 100;
 
     // 1. 로딩 상태 표시
     resultElement.innerHTML = `
         <div class="loading-spinner"></div>
         <p style="text-align: center; margin-top: 15px;">AI가 식단을 분석 중입니다...</p>
-        <p style="text-align: center;">(Google Vision API 연동 중...)</p>
+        <p style="text-align: center;">(Google Vision AI 연동 중...)</p>
     `;
     analyzeBtn.disabled = true;
     analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 분석 중...';
 
-    // 2. (발표용) API 호출 시뮬레이션
-    setTimeout(() => {
-        // 3. (가짜) 분석 완료 후 결과 표시
-        const currentGlucose = parseInt(document.getElementById('glucose-display-value').textContent) || 100;
-        
-        const recognizedFood = "쌀밥(1공기), 김치찌개, 계란말이";
-        const totalCarbs = 85; 
-        const correctionFactor = 1.2; 
-        const predictedIncrease = Math.round((totalCarbs * 0.5) * correctionFactor);
-        const predictedGlucose = currentGlucose + predictedIncrease;
+    // 2. [ 🚀 수정 ] FormData로 이미지와 현재 혈당 전송
+    const formData = new FormData();
+    formData.append('mealImage', file); // 'mealImage'는 server.js의 'upload.single' 이름과 일치
+    formData.append('currentGlucose', currentGlucose);
 
-        let status = 'warning';
-        let icon = 'fa-exclamation-circle';
-        let title = '혈당 스파이크 주의';
-        if (predictedIncrease > 60) { status = 'danger'; icon = 'fa-exclamation-triangle'; title = '고혈당 스파이크 위험'; }
-        else if (predictedIncrease < 30) { status = 'normal'; icon = 'fa-check-circle'; title = '안전한 식단'; }
+    try {
+        const response = await fetch("/api/analyze-meal", {
+            method: "POST",
+            body: formData, // (주의: FormData는 Content-Type 헤더가 필요 없음)
+        });
 
+        if (!response.ok) {
+            throw new Error(`서버 오류: ${response.statusText}`);
+        }
+
+        const result = await response.json(); // 서버에서 보낸 최종 결과
+
+        // 3. [ 🚀 수정 ] 서버에서 받은 결과(result)로 HTML 구성
         resultElement.innerHTML = `
-            <div class="meal-result-status ${status}">
-                <i class="fas ${icon}"></i>
-                <span>${title}</span>
+            <div class="meal-result-status ${result.status}">
+                <i class="fas ${result.icon}"></i>
+                <span>${result.title}</span>
             </div>
             <h3>AI 분석 요약</h3>
             <ul class="meal-result-list">
-                <li><strong>인식된 음식:</strong> ${recognizedFood}</li>
-                <li><strong>예상 탄수화물:</strong> 약 ${totalCarbs}g</li>
-                <li><strong>예상 혈당 변화:</strong> <strong class="${status}">+${predictedIncrease} mg/dL</strong></li>
+                <li><strong>인식된 음식:</strong> ${result.recognizedFood}</li>
+                <li><strong>예상 탄수화물:</strong> 약 ${result.totalCarbs}g</li>
+                <li><strong>예상 혈당 변화:</strong> <strong class="${result.status}">+${result.predictedIncrease} mg/dL</strong></li>
             </ul>
             <h3>예상 혈당 그래프</h3>
             <div class="simple-bar-chart">
                 <div class="bar-item">
-                    <span class="bar-value">${currentGlucose}</span>
-                    <div class="bar" style="height: ${Math.min(currentGlucose * 0.7, 180)}px;"></div>
+                    <span class="bar-value">${result.currentGlucose}</span>
+                    <div class="bar" style="height: ${Math.min(result.currentGlucose * 0.7, 180)}px;"></div>
                     <span class="bar-label">현재 혈당</span>
                 </div>
                 <div class="bar-item bar-predicted">
-                    <span class="bar-value">${predictedGlucose}</span>
-                    <div class="bar ${status}" style="height: ${Math.min(predictedGlucose * 0.7, 180)}px;"></div>
+                    <span class="bar-value">${result.predictedGlucose}</span>
+                    <div class="bar ${result.status}" style="height: ${Math.min(result.predictedGlucose * 0.7, 180)}px;"></div>
                     <span class="bar-label">식사 2시간 후 예상</span>
                 </div>
             </div>
             <p class="meal-result-recommendation">
-                <strong>AI 제안:</strong> 탄수화물 비중이 높습니다. 쌀밥의 양을 반으로 줄이고 채소 반찬을 추가하세요.
+                <strong>AI 제안:</strong> ${result.recommendation}
             </p>
         `;
-        
+
+    } catch (error) {
+        console.error("AI 분석 Fetch 오류:", error);
+        resultElement.innerHTML = `<p style="color: red; text-align: center;">분석에 실패했습니다: ${error.message}</p>`;
+    } finally {
         analyzeBtn.disabled = false;
         analyzeBtn.innerHTML = '<i class="fas fa-magic"></i> 이 식단 분석하기';
-
-    }, 2500); 
+    }
 }
 
 
