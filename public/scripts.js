@@ -6,13 +6,15 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // [수정] CDN의 'supabase' 객체를 사용하여 'supabaseClient'라는 새 변수를 만듭니다.
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 전역 변수로 차트 객체 선언
+// 전역 변수로 차트 객체, 모달 객체 선언
 let bpChart = null;
+let modal = null;
+let modalContent = null;
 
 // --- [ 🚀 2. 페이지 로드 시 실행 ] ---
 document.addEventListener('DOMContentLoaded', function() {
     // 모달 기능 초기화
-    setupModal();
+    setupModal(); 
     
     // 실시간 차트 초기화
     initializeRealtimeChart();
@@ -26,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- [ 🚀 3. 실시간 차트 초기화 ] ---
 function initializeRealtimeChart() {
-    // [수정] id가 'bpChart'인 캔버스를 찾습니다. (index.html에서 id를 확인하세요)
     const chartElement = document.getElementById('bpChart');
     if (!chartElement) {
         console.error("차트를 그릴 <canvas id='bpChart'> 요소를 찾을 수 없습니다.");
@@ -35,20 +36,20 @@ function initializeRealtimeChart() {
     const ctx = chartElement.getContext('2d');
     
     bpChart = new Chart(ctx, {
-        type: 'line', // 라인 차트
+        type: 'line', 
         data: {
-            labels: [], // X축 (시간)
+            labels: [], 
             datasets: [
                 {
                     label: '수축기 혈압 (SBP)',
-                    data: [], // Y축 (SBP 값)
+                    data: [], 
                     borderColor: 'rgb(255, 99, 132)',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     tension: 0.1
                 },
                 {
                     label: '이완기 혈압 (DBP)',
-                    data: [], // Y축 (DBP 값)
+                    data: [], 
                     borderColor: 'rgb(54, 162, 235)',
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     tension: 0.1
@@ -59,19 +60,21 @@ function initializeRealtimeChart() {
             scales: {
                 y: {
                     beginAtZero: false,
-                    suggestedMin: 50, // Y축 최소값
-                    suggestedMax: 160 // Y축 최대값
+                    suggestedMin: 50, 
+                    suggestedMax: 160 
                 }
             },
             animation: {
-                duration: 200 // 부드러운 업데이트
+                duration: 200 
             }
         }
     });
 }
 
-// --- [ 🚀 4. (중요) 새 데이터를 차트와 화면에 업데이트하는 함수 ] ---
+// --- [ 🚀 4. 새 데이터를 차트와 화면에 업데이트 ] ---
 function updateChartAndDisplay(newData) {
+    if (!newData || newData.systolic === undefined) return;
+
     // 1. 상단 "현재 혈압" 업데이트
     document.getElementById('systolic').textContent = newData.systolic;
     document.getElementById('diastolic').textContent = newData.diastolic;
@@ -83,33 +86,35 @@ function updateChartAndDisplay(newData) {
     const timeLabel = new Date(newData.created_at).toLocaleTimeString('ko-KR', {
         hour: '2-digit', minute: '2-digit', second: '2-digit'
     });
-    bpChart.data.labels.push(timeLabel);
-    
-    // 4. 차트 데이터셋(Y축)에 SBP, DBP 값 추가
-    bpChart.data.datasets[0].data.push(newData.systolic);
-    bpChart.data.datasets[1].data.push(newData.diastolic);
 
-    // 5. 차트에 데이터가 너무 많아지지 않도록 조절 (최대 30개)
-    const maxDataPoints = 30;
-    if (bpChart.data.labels.length > maxDataPoints) {
-        bpChart.data.labels.shift(); // 가장 오래된 레이블 제거
-        bpChart.data.datasets.forEach(dataset => {
-            dataset.data.shift(); // 가장 오래된 데이터 제거
-        });
+    if (bpChart) {
+        bpChart.data.labels.push(timeLabel);
+        
+        // 4. 차트 데이터셋(Y축)에 SBP, DBP 값 추가
+        bpChart.data.datasets[0].data.push(newData.systolic);
+        bpChart.data.datasets[1].data.push(newData.diastolic);
+
+        // 5. 차트에 데이터가 너무 많아지지 않도록 조절 (최대 30개)
+        const maxDataPoints = 30;
+        if (bpChart.data.labels.length > maxDataPoints) {
+            bpChart.data.labels.shift(); 
+            bpChart.data.datasets.forEach(dataset => {
+                dataset.data.shift(); 
+            });
+        }
+
+        // 6. 차트 다시 그리기
+        bpChart.update();
     }
-
-    // 6. 차트 다시 그리기!
-    bpChart.update();
 }
 
-// --- [ 🚀 5. (최초 로드) 페이지가 열릴 때 기존 데이터 불러오기 ] ---
+// --- [ 🚀 5. (최초 로드) 기존 데이터 불러오기 ] ---
 async function loadInitialData() {
-    // [수정] supabase -> supabaseClient
     const { data, error } = await supabaseClient
         .from('heart_beat_ai')
         .select('*')
         .order('created_at', { ascending: false }) 
-        .limit(30);
+        .limit(30); 
 
     if (error) {
         console.error('데이터 로드 실패:', error);
@@ -118,31 +123,26 @@ async function loadInitialData() {
 
     const sortedData = data.reverse();
 
-    sortedData.forEach(record => {
-        const timeLabel = new Date(record.created_at).toLocaleTimeString('ko-KR', {
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
+    if (bpChart) {
+        sortedData.forEach(record => {
+            const timeLabel = new Date(record.created_at).toLocaleTimeString('ko-KR', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+            bpChart.data.labels.push(timeLabel);
+            bpChart.data.datasets[0].data.push(record.systolic);
+            bpChart.data.datasets[1].data.push(record.diastolic);
         });
-        bpChart.data.labels.push(timeLabel);
-        bpChart.data.datasets[0].data.push(record.systolic);
-        bpChart.data.datasets[1].data.push(record.diastolic);
-    });
+        bpChart.update(); 
+    }
     
     if (sortedData.length > 0) {
         const latestData = sortedData[sortedData.length - 1];
-        document.getElementById('systolic').textContent = latestData.systolic;
-        document.getElementById('diastolic').textContent = latestData.diastolic;
-        updateBloodPressureStatus(latestData.systolic, latestData.diastolic);
-    }
-    
-    // [수정] bpChart가 null이 아닐 때만 업데이트
-    if (bpChart) {
-        bpChart.update(); // 차트 최종 업데이트
+        updateChartAndDisplay(latestData); // 상단 표시 업데이트
     }
 }
 
 // --- [ 🚀 6. (실시간) Supabase Realtime 구독 ] ---
 function subscribeToNewData() {
-    // [수정] supabase -> supabaseClient
     supabaseClient.channel('heartbeat_channel') 
         .on(
             'postgres_changes', 
@@ -162,17 +162,15 @@ function subscribeToNewData() {
 }
 
 
-// ==========================================================
-//   ▼▼▼ 기존 `scripts.js`에 있던 함수들 (재사용) ▼▼▼
-// ==========================================================
+// --- [ 7. 고혈압 전용 함수들 ] ---
 
-// [재사용] 혈압 상태 업데이트 (수정됨: 아이콘 클래스 수정)
 function updateBloodPressureStatus(systolic, diastolic) {
     const statusElement = document.getElementById('bp-status');
+    if (!statusElement) return;
     const statusText = statusElement.querySelector('.status-text');
     const statusIcon = statusElement.querySelector('i');
     
-    statusElement.className = 'bp-status'; // 기존 클래스 리셋
+    statusElement.className = 'bp-status'; 
     
     let status = '';
     let iconClass = '';
@@ -201,11 +199,10 @@ function updateBloodPressureStatus(systolic, diastolic) {
     }
     
     statusText.textContent = status;
-    statusIcon.className = iconClass; // 아이콘 클래스 변경
-    statusElement.classList.add(colorClass); // 색상 클래스 추가
+    statusIcon.className = iconClass; 
+    statusElement.classList.add(colorClass); 
 }
 
-// [재사용] 증상 체크리스트 확인
 function checkSymptoms() {
     const symptoms = [
         'headache', 'dizziness', 'chest-pain', 'shortness-breath',
@@ -216,15 +213,17 @@ function checkSymptoms() {
     let severeSymptoms = [];
     
     symptoms.forEach(symptom => {
-        if (document.getElementById(symptom).checked) {
+        const el = document.getElementById(symptom);
+        if (el && el.checked) {
             checkedCount++;
             if (['chest-pain', 'shortness-breath', 'irregular-heartbeat'].includes(symptom)) {
                 severeSymptoms.push(symptom);
             }
-        } // <-- [수정] 문제의 ' * '가 있던 줄을 삭제했습니다.
+        } 
     });
     
     const resultElement = document.getElementById('symptoms-result');
+    if (!resultElement) return;
     
     if (checkedCount === 0) {
         resultElement.innerHTML = '<p>증상을 체크해주세요.</p>';
@@ -255,123 +254,74 @@ function checkSymptoms() {
     }
 }
 
-// [재사용] 모달 설정
+
+// ==========================================================
+//   ▼▼▼ [ 🚀 8. 공통 모달 함수 (중앙 모달 방식) ] ▼▼▼
+// ==========================================================
 function setupModal() {
-    const modal = document.getElementById('modal');
+    modal = document.getElementById('modal');
+    modalContent = document.querySelector('.modal-content'); 
     const closeBtn = document.querySelector('.close');
     
-    closeBtn.onclick = function() {
-        modal.style.display = 'none';
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
     }
     
     window.onclick = function(event) {
         if (event.target === modal) {
-            modal.style.display = 'none';
+            closeModal();
         }
     }
 }
 
-// [재사용] 상세 예방법 보기
+function closeModal() {
+    if (modal) {
+        modal.style.display = 'none';
+        if (modalContent) {
+            modalContent.classList.remove('modal-lg');
+        }
+    }
+}
+
+function openModal(content) {
+    if (modal) {
+        document.getElementById('modal-body').innerHTML = content;
+        modal.style.display = 'block';
+    }
+}
+
+// (고혈압 페이지 전용 모달 함수들)
 function showPreventionTips() {
-    const modal = document.getElementById('modal');
-    const modalBody = document.getElementById('modal-body');
-    
-    modalBody.innerHTML = `
+    const content = `
         <h2><i class="fas fa-lightbulb"></i> 고혈압 예방 상세 가이드</h2>
-        
         <div style="margin: 20px 0;">
             <h3><i class="fas fa-utensils"></i> 식이 관리</h3>
             <ul style="margin: 15px 0; padding-left: 20px;">
                 <li>나트륨 섭취를 하루 2,300mg 이하로 제한</li>
                 <li>DASH 다이어트: 과일, 채소, 저지방 유제품, 견과류</li>
                 <li>포화지방과 콜레스테롤 섭취 줄이기</li>
-                <li>칼륨, 마그네슘, 칼슘 섭취 증가</li>
             </ul>
         </div>
-        
         <div style="margin: 20px 0;">
             <h3><i class="fas fa-running"></i> 운동 가이드</h3>
             <ul style="margin: 15px 0; padding-left: 20px;">
                 <li>주 3-4회, 30-45분 유산소 운동</li>
                 <li>걷기, 수영, 자전거, 조깅 등</li>
-                <li>중강도 운동: 대화가 가능한 수준</li>
-                <li>점진적으로 운동 강도와 시간 증가</li>
-            </ul>
-        </div>
-        
-        <div style="margin: 20px 0;">
-            <h3><i class="fas fa-weight"></i> 체중 관리</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>BMI 25 이하 유지</li>
-                <li>복부 둘레: 남성 90cm, 여성 85cm 이하</li>
-                <li>체중의 5-10% 감량으로도 혈압 개선</li>
-                <li>균형 잡힌 식단과 규칙적인 운동</li>
-            </ul>
-        </div>
-        
-        <div style="margin: 20px 0;">
-            <h3><i class="fas fa-bed"></i> 생활 습관</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>하루 7-8시간 충분한 수면</li>
-                <li>스트레스 관리: 명상, 요가, 취미 활동</li>
-                <li>금연 및 알코올 제한</li>
-                <li>정기적인 혈압 측정 및 기록</li>
             </ul>
         </div>
     `;
-    
-    modal.style.display = 'block';
+    openModal(content);
 }
 
-// [재사용] 119 신고
 function callEmergency() {
     if (confirm('119에 신고하시겠습니까?\n\n긴급 상황이 아닌 경우 일반 상담을 이용해주세요.')) {
         alert('119 신고가 연결되었습니다.\n\n응급차가 출동합니다.');
-        
-        const modal = document.getElementById('modal');
-        const modalBody = document.getElementById('modal-body');
-        
-        modalBody.innerHTML = `
-            <h2 style="color: #e53e3e;"><i class="fas fa-ambulance"></i> 응급 상황 안내</h2>
-            <div style="margin: 20px 0; padding: 20px; background: #fed7d7; border-radius: 10px;">
-                <h3>응급차 출동 중입니다</h3>
-                <p><strong>예상 도착 시간:</strong> 5-10분</p>
-                <p><strong>응급실 준비사항:</strong></p>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>증상 기록 준비</li>
-                    <li>복용 중인 약물 목록</li>
-                    <li>보험증 및 신분증</li>
-                    <li>가족 연락처</li>
-V             </ul>
-            </div>
-            <div style="margin: 20px 0; padding: 20px; background: #c6f6d5; border-radius: 10px;">
-                <h3>응급차 도착 전 안전 수칙</h3>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>안전한 장소에서 대기</li>
-                    <li>갑작스러운 움직임 자제</li>
-                    <li>증상 악화 시 즉시 재연락</li>
-                </ul>
-            </div>
-        `;
-        
-        modal.style.display = 'block';
     }
 }
 
-// [재사용] 건강 정보 보기
 function showHealthInfo() {
-    const modal = document.getElementById('modal');
-    const modalBody = document.getElementById('modal-body');
-    
-    modalBody.innerHTML = `
+    const content = `
         <h2><i class="fas fa-info-circle"></i> 고혈압 건강 정보</h2>
-        
-        <div style="margin: 20px 0;">
-            <h3>고혈압이란?</h3>
-            <p>수축기 혈압 140mmHg 이상 또는 이완기 혈압 90mmHg 이상인 상태를 말합니다.</p>
-body {
-        </div>
-        
         <div style="margin: 20px 0;">
             <h3>혈압 분류</h3>
             <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
@@ -388,47 +338,15 @@ body {
                 <tr style="background: #f7fafc;">
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 전단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">120-139</td>
-                  nbsp; <td style="border: 1px solid #e2e8f0; padding: 10px;">80-89</td>
+                    <td style="border: 1px solid #e2e8f0; padding: 10px;">80-89</td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 1단계</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">140-159</td>
                     <td style="border: 1px solid #e2e8f0; padding: 10px;">90-99</td>
-A             </tr>
-                <tr style="background: #f7fafc;">
-                    <td style="border: 1px solid #e2e8f0; padding: 10px;">고혈압 2단계</td>
-                    <td style="border: 1px solid #e2e8f0; padding: 10px;">≥ 160</td>
-                    <td style="border: 1px solid #e2e8f0; padding: 10px;">≥ 100</td>
                 </tr>
             </table>
         </div>
-        
-        <div style="margin: 20px 0;">
-            <h3>고혈압의 위험성</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>뇌졸중 위험 증가</li>
-                <li>심장병 위험 증가</li>
-                <li>신장 질환 위험 증가</li>
-                <li>시력 손실 위험</li>
-            </ul>
-        </div>
-        
-        <div style="margin: 20px 0;">
-            <h3>정기 검진 권장사항</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>20세 이상: 2년마다 혈압 측정</li>
-                <li>고혈압 전단계: 1년마다</li>
-                <li>고혈압: 3-6개월마다</li>
-                <li>65세 이상: 매년</li>
-            </ul>
-        </div>
     `;
-    
-    modal.style.display = 'block';
+    openModal(content);
 }
-
-// [삭제] 윈도우 리사이즈 함수 (ECG용이었으므로 제거)
-// [삭제] updateBloodPressure 함수 (수동 입력용이었으므로 제거)
-// [삭제] loadHeartBeats 함수 (Supabase 로직으로 대체되었으므로 제거)
-
-
