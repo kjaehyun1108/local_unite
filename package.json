@@ -1,14 +1,19 @@
 {
-  "name": "local_unite",
-  "version": "1.0.0",
-  "main": "server.js",
-  "type": "module",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.46.0",
-    "express": "^4.19.0",
-    "cors": "^2.8.5"
-  }
+  "name": "local_unite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",  /* [ 👈 🚀 이 한 줄을 추가하세요 ] */
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
 }
